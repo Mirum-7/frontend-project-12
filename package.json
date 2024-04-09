@@ -1,0 +1,14 @@
+{
+  "name": "@hexlet/code",
+  "version": "1.0.0",
+  "description": "Chat",
+  "main": "index.js",
+  "scripts": {
+    "start": "npx start-server -s ./frontend/build"
+  },
+  "author": "Mirum7",
+  "license": "ISC",
+  "dependencies": {
+    "@hexlet/chat-server": "^2.0.3"
+  }
+}

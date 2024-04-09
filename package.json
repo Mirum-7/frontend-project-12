@@ -4,7 +4,8 @@
   "description": "Chat",
   "main": "index.js",
   "scripts": {
-    "start": "npx start-server -s ./frontend/build"
+    "start": "npx start-server -s ./frontend/build",
+    "build": "npm run build --prefix frontend"
   },
   "author": "Mirum7",
   "license": "ISC",

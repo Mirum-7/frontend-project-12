@@ -1,6 +1,11 @@
 import { useFormik } from 'formik';
 import { object, string } from 'yup';
 import './index.css';
+import { useState } from 'react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import routes from '../../routes';
+import useAuth from '../../hooks/Auth';
 
 const signupSchame = object().shape({
   username: string()
@@ -8,19 +13,36 @@ const signupSchame = object().shape({
     .max(30, 'Максимум 30 букв')
     .required('Обязательное поле'),
   password: string()
-    .min(6, 'Минимум 6 букв')
+    .min(5, 'Минимум 5 букв')
     .required('Обязательное поле'),
 });
 
 const LoginForm = () => {
+  const [authFailed, setAuthFailed] = useState(false);
+  const navigate = useNavigate();
+
+  const auth = useAuth();
+
   const formik = useFormik({
     initialValues: {
       username: '',
       password: '',
     },
     validationSchema: signupSchame,
-    onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
+    onSubmit: async (values) => {
+      setAuthFailed(false);
+
+      try {
+        const response = await axios.post(routes.login, values);
+        localStorage.setItem('userId', JSON.stringify(response.data));
+
+        auth.logIn();
+
+        navigate('/');
+      } catch (err) {
+        setAuthFailed(true);
+        console.log(err);
+      }
     },
   });
 
@@ -38,7 +60,7 @@ const LoginForm = () => {
           onChange={formik.handleChange}
           value={formik.values.username}
         />
-        {formik.errors.username ? <div className="text-error form-error">{formik.errors.username}</div> : <div className="form-error" />}
+        <div className="form-error text-error">{formik.errors.username ? formik.errors.username : null}</div>
       </div>
 
       <div className="form-group">
@@ -51,9 +73,10 @@ const LoginForm = () => {
           onChange={formik.handleChange}
           value={formik.values.password}
         />
-        {formik.errors.password ? <div className="text-error form-error">{formik.errors.password}</div> : <div className="form-error" />}
+        <div className="form-error text-error">{formik.errors.password ? formik.errors.password : null}</div>
       </div>
 
+      <div className="form-error text-error">{authFailed ? 'Не правильный логин или пароль' : null}</div>
       <button type="submit" className="btn">Войти</button>
     </form>
   );

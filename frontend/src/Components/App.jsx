@@ -1,8 +1,9 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import AuthProvider from './providers/Auth';
-import Login from './pages/Login';
-import Error404 from './pages/Error404';
-import Main from './pages/Main';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import Error404 from '../pages/Error404';
+import Login from '../pages/Login';
+import Main from '../pages/Main';
+import AuthProvider from '../providers/Auth';
+import '../styles/index.scss';
 
 const App = () => (
   <BrowserRouter>

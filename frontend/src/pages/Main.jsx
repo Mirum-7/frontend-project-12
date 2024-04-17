@@ -1,28 +1,15 @@
-import { useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
+import { Button } from 'react-bootstrap';
 import useAuth from '../hooks/Auth';
 
 const Main = () => {
   const auth = useAuth();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const user = JSON.parse(localStorage.getItem('userId'));
-
-    console.log(user);
-    if (user && user.token) {
-      auth.logIn();
-    } else {
-      navigate('/login');
-    }
-  });
 
   return (
     <h1>
       Main page
-      <button onClick={auth.logOut} type="button" className="btn">
+      <Button onClick={auth.logOut} type="button" className="btn" variant="outline-primary">
         Выйти
-      </button>
+      </Button>
     </h1>
   );
 };

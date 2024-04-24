@@ -4,54 +4,54 @@ import axiosBaseQuery, { createHeaders } from './axiosBaseQuery';
 
 const getTokenFromStorage = () => JSON.parse(localStorage.getItem('userId')).token;
 
-const channelApi = createApi({
-  reducerPath: 'channels',
-  tagTypes: ['channels', 'messages'],
+const messageApi = createApi({
+  reducerPath: 'messages',
+  tagTypes: ['messages'],
   baseQuery: axiosBaseQuery({
-    baseUrl: routes.channels,
+    baseUrl: routes.messages,
   }),
   endpoints: (builder) => ({
-    getChannels: builder.query({
+    getMessages: builder.query({
       query: () => ({
         url: '',
         method: 'get',
         headers: createHeaders(getTokenFromStorage()),
       }),
-      providesTags: ['channels'],
+      providesTags: ['messages'],
     }),
-    addChannel: builder.mutation({
-      query: (channel) => ({
+    addMessage: builder.mutation({
+      query: (message) => ({
         url: '',
         method: 'post',
-        data: channel,
+        data: message,
         headers: createHeaders(getTokenFromStorage()),
       }),
-      invalidatesTags: ['channels'],
+      invalidatesTags: ['messages'],
     }),
-    editChannel: builder.mutation({
-      query: ({ id, channel }) => ({
+    editMessage: builder.mutation({
+      query: ({ id, message }) => ({
         url: `/${id}`,
         method: 'patch',
-        data: channel,
+        data: message,
         headers: createHeaders(getTokenFromStorage()),
       }),
-      invalidatesTags: ['channels'],
+      invalidatesTags: ['messages'],
     }),
-    removeChannel: builder.mutation({
+    removeMessage: builder.mutation({
       query: (id) => ({
         url: `/${id}`,
         method: 'delete',
         headers: createHeaders(getTokenFromStorage()),
       }),
-      invalidatesTags: ['channels', 'messages'],
+      invalidatesTags: ['messages'],
     }),
   }),
 });
 
 export const {
-  useGetChannelsQuery,
-  useAddChannelMutation,
-  useEditChannelMutation,
-  useRemoveChannelMutation,
-} = channelApi;
-export default channelApi;
+  useGetMessagesQuery,
+  useAddMessageMutation,
+  useEditMessageMutation,
+  useRemoveMessageMutation,
+} = messageApi;
+export default messageApi;

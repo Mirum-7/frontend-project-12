@@ -20,16 +20,14 @@ const ChannelNavItem = ({
   const selected = useSelector(getSelectedId);
   const getVariant = () => (selected === id ? 'secondary' : null);
 
-  const selectHandler = () => dispatch(select(id));
+  const selectHandler = () => dispatch(select({ id, name: title }));
 
   const [
     removeChannel,
   ] = useRemoveChannelMutation();
-  const { refetch } = useGetChannelsQuery();
 
   const removeHandler = () => {
     removeChannel(id);
-    refetch();
   };
 
   const editHandler = () => {
@@ -40,15 +38,15 @@ const ChannelNavItem = ({
 
   if (!removable) {
     button = (
-      <Button variant={getVariant()} onClick={selectHandler} className="w-100">
-        {title}
+      <Button variant={getVariant()} onClick={selectHandler} className="w-100 text-start text-truncate">
+        {`# ${title}`}
       </Button>
     );
   } else {
     button = (
       <Dropdown as={ButtonGroup} className="w-100">
-        <Button variant={getVariant()} onClick={selectHandler} className="w-100 text-truncate">
-          {title}
+        <Button variant={getVariant()} onClick={selectHandler} className="w-100 text-truncate text-start">
+          {`# ${title}`}
         </Button>
         <Dropdown.Toggle variant={getVariant()} split />
         <Dropdown.Menu>

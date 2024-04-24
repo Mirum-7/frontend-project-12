@@ -24,6 +24,7 @@ const authSlice = createSlice({
 });
 
 export const getLoggedIn = (state) => state.auth.loggedIn;
+export const getUsername = (state) => state.auth.username;
 export const getToken = (state) => state.auth.loggedIn;
 
 export const { logIn, logOut } = authSlice.actions;

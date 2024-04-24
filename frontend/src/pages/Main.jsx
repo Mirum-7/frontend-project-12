@@ -1,6 +1,7 @@
 import { Button, Container } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 import ChannelNavList from '../Components/ChannelNavList';
+import Chat from '../Components/Chat';
 import CustomModal from '../Components/CustomModal';
 import CustomNavbar from '../Components/CustomNavBar';
 import { open } from '../store/slices/modal';
@@ -32,8 +33,8 @@ const Main = () => {
               </Button>
             </div>
           </aside>
-          <main>
-            chat
+          <main className="w-100">
+            <Chat />
           </main>
         </Container>
       </div>

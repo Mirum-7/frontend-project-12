@@ -1,11 +1,9 @@
 import { useFormik } from 'formik';
-import { useRef } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   useAddChannelMutation,
   useEditChannelMutation,
-  useGetChannelsQuery,
 } from '../store/slices/channels';
 import {
   close,
@@ -17,8 +15,6 @@ const CustomModal = () => {
   const dispatch = useDispatch();
   const opened = useSelector(getOpened);
 
-  const ref = useRef();
-
   const initialValues = {
     name: '',
   };
@@ -27,7 +23,6 @@ const CustomModal = () => {
   let title;
   let response;
 
-  const { refetch } = useGetChannelsQuery();
   const [
     addChannel,
   ] = useAddChannelMutation();
@@ -57,7 +52,6 @@ const CustomModal = () => {
     onSubmit: (values) => {
       formik.resetForm();
       response(values);
-      refetch();
     },
   });
 
@@ -77,7 +71,6 @@ const CustomModal = () => {
               placeholder="Введите название"
               onChange={formik.handleChange}
               value={formik.values.name}
-              ref={ref}
               autoFocus
             />
           </Form.Group>

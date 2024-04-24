@@ -1,19 +1,14 @@
-import { createApi } from '@reduxjs/toolkit/query/react';
+import baseApi from './baseApi';
+import { createHeaders } from './axiosBaseQuery';
 import routes from '../../routes';
-import axiosBaseQuery, { createHeaders } from './axiosBaseQuery';
 
 const getTokenFromStorage = () => JSON.parse(localStorage.getItem('userId')).token;
 
-const channelApi = createApi({
-  reducerPath: 'channels',
-  tagTypes: ['channels', 'messages'],
-  baseQuery: axiosBaseQuery({
-    baseUrl: routes.channels,
-  }),
+const channelApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getChannels: builder.query({
       query: () => ({
-        url: '',
+        url: routes.channels,
         method: 'get',
         headers: createHeaders(getTokenFromStorage()),
       }),
@@ -21,7 +16,7 @@ const channelApi = createApi({
     }),
     addChannel: builder.mutation({
       query: (channel) => ({
-        url: '',
+        url: routes.channels,
         method: 'post',
         data: channel,
         headers: createHeaders(getTokenFromStorage()),
@@ -30,7 +25,7 @@ const channelApi = createApi({
     }),
     editChannel: builder.mutation({
       query: ({ id, channel }) => ({
-        url: `/${id}`,
+        url: `${routes.channels}/${id}`,
         method: 'patch',
         data: channel,
         headers: createHeaders(getTokenFromStorage()),
@@ -39,7 +34,7 @@ const channelApi = createApi({
     }),
     removeChannel: builder.mutation({
       query: (id) => ({
-        url: `/${id}`,
+        url: `${routes.channels}/${id}`,
         method: 'delete',
         headers: createHeaders(getTokenFromStorage()),
       }),

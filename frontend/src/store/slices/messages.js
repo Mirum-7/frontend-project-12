@@ -1,19 +1,14 @@
-import { createApi } from '@reduxjs/toolkit/query/react';
+import baseApi from './baseApi';
+import { createHeaders } from './axiosBaseQuery';
 import routes from '../../routes';
-import axiosBaseQuery, { createHeaders } from './axiosBaseQuery';
 
 const getTokenFromStorage = () => JSON.parse(localStorage.getItem('userId')).token;
 
-const messageApi = createApi({
-  reducerPath: 'messages',
-  tagTypes: ['messages'],
-  baseQuery: axiosBaseQuery({
-    baseUrl: routes.messages,
-  }),
+const messageApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getMessages: builder.query({
       query: () => ({
-        url: '',
+        url: routes.messages,
         method: 'get',
         headers: createHeaders(getTokenFromStorage()),
       }),
@@ -21,7 +16,7 @@ const messageApi = createApi({
     }),
     addMessage: builder.mutation({
       query: (message) => ({
-        url: '',
+        url: routes.messages,
         method: 'post',
         data: message,
         headers: createHeaders(getTokenFromStorage()),
@@ -30,7 +25,7 @@ const messageApi = createApi({
     }),
     editMessage: builder.mutation({
       query: ({ id, message }) => ({
-        url: `/${id}`,
+        url: `${routes.messages}/${id}`,
         method: 'patch',
         data: message,
         headers: createHeaders(getTokenFromStorage()),
@@ -39,7 +34,7 @@ const messageApi = createApi({
     }),
     removeMessage: builder.mutation({
       query: (id) => ({
-        url: `/${id}`,
+        url: `${routes.messages}/${id}`,
         method: 'delete',
         headers: createHeaders(getTokenFromStorage()),
       }),

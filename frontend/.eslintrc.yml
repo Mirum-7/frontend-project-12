@@ -6,6 +6,7 @@ extends:
   - airbnb
   - plugin:react/recommended
   - plugin:react-hooks/recommended
+  - plugin:react-redux/recommended
 
 parserOptions:
   ecmaFeatures:
@@ -15,6 +16,7 @@ parserOptions:
 
 plugins:
   - react
+  - react-redux
 
 rules:
   jsx-a11y/label-has-associated-control: 0
@@ -25,5 +27,7 @@ rules:
   react/react-in-jsx-scope: 0
   no-underscore-dangle: [2, { "allow": ["__filename", "__dirname"] }]
   react/function-component-definition: [2, { "namedComponents": "arrow-function" }]
+  react/prefer-stateless-function: 0
   testing-library/no-debug: 0
   react/jsx-filename-extension: [1, { "extensions": [".js", ".jsx"] }]
+  no-param-reassign: 0

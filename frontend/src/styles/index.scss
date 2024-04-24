@@ -4,3 +4,40 @@
 body {
   height: 100vh;
 }
+
+.chat-aside {
+  font-size: $font-size-base;
+  width: 170px;
+  border-right: 1px solid $border-color;
+  background: $light;
+  display: flex;
+  flex-direction: column;
+
+  &__header {
+    font-weight: $font-weight-bold;
+    width: 100%;
+    padding: 1rem;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__main {
+    overflow-y: auto;
+    flex-grow: 1;
+  }
+
+  &__footer {
+    padding: 1rem;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  @media (min-width: map-get($grid-breakpoints, md)) {
+    width: 230px;
+  }
+}
+

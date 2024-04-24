@@ -2,9 +2,10 @@ import axios from 'axios';
 import { useFormik } from 'formik';
 import { useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
-import useAuth from '../hooks/Auth';
+import { useDispatch } from 'react-redux';
+import { useLocation, useNavigate } from 'react-router-dom';
 import routes from '../routes';
+import { logIn } from '../store/slices/auth';
 
 // const signupSchame = object().shape({
 //   username: string()
@@ -20,9 +21,10 @@ const LoginForm = () => {
   const [authFailed, setAuthFailed] = useState(false);
   const [errorMessage, setErrorMessage] = useState();
 
-  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  const auth = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const formik = useFormik({
     initialValues: {
@@ -33,11 +35,13 @@ const LoginForm = () => {
     onSubmit: async (values) => {
       try {
         const response = await axios.post(routes.login, values);
+
         localStorage.setItem('userId', JSON.stringify(response.data));
 
-        auth.logIn();
+        dispatch(logIn(response.data));
 
-        navigate('/');
+        const { from } = location.state;
+        navigate(from);
       } catch (err) {
         if (err.isAxiosError && err.response?.status === 401) {
           setErrorMessage('Неверный логин или пароль');

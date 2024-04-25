@@ -22,7 +22,11 @@ const Message = ({ username, children }) => (
 
 const MessageBox = () => {
   const selectedChannelId = useSelector(getSelectedId);
-  const { data, isLoading } = useGetMessagesQuery();
+  const { data, isLoading, isError } = useGetMessagesQuery();
+
+  if (isError) {
+    return null;
+  }
 
   if (isLoading) {
     return null;
@@ -94,7 +98,11 @@ const MessageField = () => {
 const Chat = () => {
   const channelName = useSelector(getSelectedName);
   const channelId = useSelector(getSelectedId);
-  const { data, isLoading } = useGetMessagesQuery();
+  const { data, isLoading, isError } = useGetMessagesQuery();
+
+  if (isError) {
+    return null;
+  }
 
   if (isLoading) {
     return null;

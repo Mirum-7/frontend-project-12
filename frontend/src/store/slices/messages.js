@@ -2,7 +2,7 @@ import baseApi from './baseApi';
 import { createHeaders } from './axiosBaseQuery';
 import routes from '../../routes';
 
-const getTokenFromStorage = () => JSON.parse(localStorage.getItem('userId')).token;
+const getTokenFromStorage = () => JSON.parse(localStorage.getItem('userId'))?.token;
 
 const messageApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({

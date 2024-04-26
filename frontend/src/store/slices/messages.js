@@ -1,3 +1,4 @@
+import { io } from 'socket.io-client';
 import baseApi from './baseApi';
 import { createHeaders } from './axiosBaseQuery';
 import routes from '../../routes';
@@ -13,6 +14,28 @@ const messageApi = baseApi.injectEndpoints({
         headers: createHeaders(getTokenFromStorage()),
       }),
       providesTags: ['messages'],
+      async onCacheEntryAdded(
+        arg,
+        { updateCachedData, cacheDataLoaded, cacheEntryRemoved },
+      ) {
+        const socket = io();
+
+        try {
+          await cacheDataLoaded;
+
+          const listener = (data) => {
+            updateCachedData((draft) => {
+              draft.push(data);
+            });
+          };
+
+          socket.on('newMessage', listener);
+        } catch (e) {
+          console.log(e);
+        }
+
+        await cacheEntryRemoved;
+      },
     }),
     addMessage: builder.mutation({
       query: (message) => ({
@@ -21,24 +44,7 @@ const messageApi = baseApi.injectEndpoints({
         data: message,
         headers: createHeaders(getTokenFromStorage()),
       }),
-      invalidatesTags: ['messages'],
-    }),
-    editMessage: builder.mutation({
-      query: ({ id, message }) => ({
-        url: `${routes.messages}/${id}`,
-        method: 'patch',
-        data: message,
-        headers: createHeaders(getTokenFromStorage()),
-      }),
-      invalidatesTags: ['messages'],
-    }),
-    removeMessage: builder.mutation({
-      query: (id) => ({
-        url: `${routes.messages}/${id}`,
-        method: 'delete',
-        headers: createHeaders(getTokenFromStorage()),
-      }),
-      invalidatesTags: ['messages'],
+      // invalidatesTags: ['messages'],
     }),
   }),
 });

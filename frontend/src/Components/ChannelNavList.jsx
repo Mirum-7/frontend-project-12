@@ -6,7 +6,11 @@ import {
   Placeholder,
 } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import { getSelectedId, select } from '../store/slices/selected';
+import {
+  getDefaultSelectedId,
+  getSelectedId,
+  select,
+} from '../store/slices/selected';
 import { useGetChannelsQuery, useRemoveChannelMutation } from '../store/slices/channels';
 import { open } from '../store/slices/modal';
 
@@ -18,15 +22,23 @@ const ChannelNavItem = ({
   const dispatch = useDispatch();
 
   const selected = useSelector(getSelectedId);
-  const getVariant = () => (selected === id ? 'secondary' : null);
+  const defaultSelectedId = useSelector(getDefaultSelectedId);
 
-  const selectHandler = () => dispatch(select({ id, name: title }));
+  const isCurrentSelected = selected === id;
+  const getVariant = () => (isCurrentSelected ? 'secondary' : null);
+
+  const selectHandler = () => {
+    dispatch(select({ id }));
+  };
 
   const [
     removeChannel,
   ] = useRemoveChannelMutation();
 
   const removeHandler = () => {
+    if (isCurrentSelected) {
+      dispatch(select({ id: defaultSelectedId }));
+    }
     removeChannel(id);
   };
 
@@ -82,7 +94,6 @@ const ChannelNavList = () => {
       </Nav>
     );
   }
-
   const items = data.map((channel) => (
     <ChannelNavItem
       key={channel.id}

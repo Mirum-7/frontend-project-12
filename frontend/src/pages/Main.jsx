@@ -33,7 +33,7 @@ const Main = () => {
               </Button>
             </div>
           </aside>
-          <main className="w-100">
+          <main className="flex-grow-1">
             <Chat />
           </main>
         </Container>

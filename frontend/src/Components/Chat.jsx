@@ -1,4 +1,5 @@
 import { useFormik } from 'formik';
+import { useEffect } from 'react';
 import {
   Button,
   Form,
@@ -6,19 +7,26 @@ import {
 } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import { object, string } from 'yup';
-import { useAddMessageMutation, useGetMessagesQuery } from '../store/slices/messages';
-import { getSelectedId, getSelectedName } from '../store/slices/selected';
 import { getUsername } from '../store/slices/auth';
+import { useGetChannelsQuery } from '../store/slices/channels';
+import { useAddMessageMutation, useGetMessagesQuery } from '../store/slices/messages';
+import { getSelectedId } from '../store/slices/selected';
 
-const Message = ({ username, children }) => (
-  <div className="text-break mb-2">
-    <b>
-      {username}
-    </b>
-    :&nbsp;
-    {children}
-  </div>
-);
+const Message = ({ username, children, error }) => {
+  if (error) {
+    return <div className="text-danger">Не удалось отправиться сообщение</div>;
+  }
+
+  return (
+    <div className="text-break mb-2">
+      <b>
+        {username}
+      </b>
+      :&nbsp;
+      {children}
+    </div>
+  );
+};
 
 const MessageBox = () => {
   const selectedChannelId = useSelector(getSelectedId);
@@ -50,7 +58,14 @@ const MessageField = () => {
   const username = useSelector(getUsername);
   const [
     addMessage,
+    { isError },
   ] = useAddMessageMutation();
+
+  useEffect(() => {
+    if (isError) {
+      alert('Не удалось отправить сообщение');
+    }
+  }, [isError]);
 
   const shcema = object().shape({
     message: string().required(),
@@ -96,19 +111,29 @@ const MessageField = () => {
 };
 
 const Chat = () => {
-  const channelName = useSelector(getSelectedName);
   const channelId = useSelector(getSelectedId);
-  const { data, isLoading, isError } = useGetMessagesQuery();
+  const {
+    data: messages,
+    isLoading: isLoadingMessages,
+    isError: isErrorMessages,
+  } = useGetMessagesQuery();
+  const {
+    data: channels,
+    isLoading: isLoadingChannels,
+    isError: isErrorChannels,
+  } = useGetChannelsQuery();
 
-  if (isError) {
+  if (isErrorMessages || isErrorChannels) {
     return null;
   }
 
-  if (isLoading) {
+  if (isLoadingMessages || isLoadingChannels) {
     return null;
   }
 
-  const { length } = data.filter((message) => message.channelId === channelId);
+  const { name: channelName } = channels.find((channel) => channel.id === channelId);
+
+  const { length } = messages.filter((message) => message.channelId === channelId);
 
   const getVariant = (count) => {
     if (count === 1) {

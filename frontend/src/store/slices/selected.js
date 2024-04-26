@@ -1,8 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  channelId: null,
-  name: '',
+  channelId: '1',
+  default: '1',
 };
 
 const selectedSlice = createSlice({
@@ -11,14 +11,13 @@ const selectedSlice = createSlice({
   reducers: {
     select: (state, { payload }) => {
       state.channelId = payload.id;
-      state.name = payload.name;
     },
   },
 });
 
 export const getSelectedId = (state) => state.selected.channelId;
-export const getSelectedName = (state) => state.selected.name;
+export const getDefaultSelectedId = (state) => state.selected.default;
 
-export const { select } = selectedSlice.actions;
+export const { select, setLastSelected } = selectedSlice.actions;
 
 export default selectedSlice.reducer;

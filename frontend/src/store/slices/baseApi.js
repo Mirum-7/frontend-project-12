@@ -3,7 +3,7 @@ import axiosBaseQuery from './axiosBaseQuery';
 
 const baseApi = createApi({
   reducerPath: 'base',
-  tagTypes: ['channels', 'messages'],
+  tagTypes: ['messages'],
   baseQuery: axiosBaseQuery({
     baseUrl: '/',
   }),

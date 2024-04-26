@@ -7,7 +7,8 @@ body {
 
 .chat-aside {
   font-size: $font-size-base;
-  width: 170px;
+  min-width: 170px;
+  max-width: 170px;
   border-right: 1px solid $border-color;
   background: $light;
   display: flex;
@@ -37,7 +38,8 @@ body {
   }
 
   @media (min-width: map-get($grid-breakpoints, md)) {
-    width: 230px;
+    min-width: 230px;
+    max-width: 230px;
   }
 }
 

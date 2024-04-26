@@ -111,7 +111,7 @@ const MessageField = () => {
 };
 
 const Chat = () => {
-  const channelId = useSelector(getSelectedId);
+  const selectedId = useSelector(getSelectedId);
   const {
     data: messages,
     isLoading: isLoadingMessages,
@@ -131,9 +131,9 @@ const Chat = () => {
     return null;
   }
 
-  const { name: channelName } = channels.find((channel) => channel.id === channelId);
+  const { name: channelName } = channels.find((channel) => channel.id === selectedId);
 
-  const { length } = messages.filter((message) => message.channelId === channelId);
+  const { length } = messages.filter((message) => message.channelId === selectedId);
 
   const getVariant = (count) => {
     if (count === 1) {

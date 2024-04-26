@@ -77,6 +77,11 @@ const ChannelNavItem = ({
 };
 
 const ChannelNavList = () => {
+  const selectedId = useSelector(getSelectedId);
+  const defaultSelectedId = useSelector(getDefaultSelectedId);
+
+  const dispatch = useDispatch();
+
   const {
     data,
     isLoading,
@@ -94,6 +99,13 @@ const ChannelNavList = () => {
       </Nav>
     );
   }
+
+  const selectedChannel = data.find((channel) => channel.id === selectedId);
+
+  if (!selectedChannel) {
+    dispatch(select({ id: defaultSelectedId }));
+  }
+
   const items = data.map((channel) => (
     <ChannelNavItem
       key={channel.id}

@@ -22,7 +22,6 @@ const ChannelNavItem = ({
   const dispatch = useDispatch();
 
   const selected = useSelector(getSelectedId);
-  const defaultSelectedId = useSelector(getDefaultSelectedId);
 
   const isCurrentSelected = selected === id;
   const getVariant = () => (isCurrentSelected ? 'secondary' : null);
@@ -36,9 +35,6 @@ const ChannelNavItem = ({
   ] = useRemoveChannelMutation();
 
   const removeHandler = () => {
-    if (isCurrentSelected) {
-      dispatch(select({ id: defaultSelectedId }));
-    }
     removeChannel(id);
   };
 

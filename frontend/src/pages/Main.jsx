@@ -6,6 +6,12 @@ import CustomModal from '../Components/CustomModal';
 import CustomNavbar from '../Components/CustomNavBar';
 import { open } from '../store/slices/modal';
 
+const modals = {
+  add: 'a',
+  edit: 'b',
+  remove: 'c',
+};
+
 const Main = () => {
   const dispatch = useDispatch();
 

@@ -3,63 +3,38 @@ import { Button, Form, Modal } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { object, string } from 'yup';
 import {
-  useAddChannelMutation,
-  useEditChannelMutation,
-  useGetChannelsQuery,
-} from '../store/slices/channels';
-import {
   close,
   getOpened,
   getType,
-} from '../store/slices/modal';
-import { select } from '../store/slices/selected';
+} from '../../store/slices/modal';
+import { useAddChannelMutation, useGetChannelsQuery } from '../../store/slices/channels';
 
-const CustomModal = () => {
+const AddModal = () => {
   const dispatch = useDispatch();
-  const opened = useSelector(getOpened);
+  const status = useSelector(getOpened);
+  const type = useSelector(getType);
 
-  const closeHandler = () => dispatch(close());
+  const [
+    addChannel,
+    { isLoading: isLoadingAdd },
+  ] = useAddChannelMutation();
+  const { data, isLoading: isLoadingGet, isError: isErrorGet } = useGetChannelsQuery();
+
+  let names = [];
+  if (!isLoadingGet && !isErrorGet) {
+    names = data.map((channel) => channel.name);
+  }
+
+  const isOpened = status && type === 'add';
+
+  const closeHandler = (formik) => {
+    dispatch(close());
+    formik.resetForm();
+  };
 
   const initialValues = {
     name: '',
   };
-
-  const [type, id] = useSelector(getType).split('-');
-  let title;
-  let handler;
-
-  const [
-    addChannel,
-  ] = useAddChannelMutation();
-  const [
-    editChannel,
-  ] = useEditChannelMutation();
-  const { data, isLoading } = useGetChannelsQuery();
-
-  let names = [];
-  if (!isLoading) {
-    names = data.map((channel) => channel.name);
-  }
-
-  switch (type) {
-    case 'add':
-      title = 'Добавить канал';
-      handler = (values) => {
-        addChannel(values)
-          .then((response) => {
-            dispatch(select(response.data));
-          });
-      };
-      break;
-    case 'edit':
-      title = 'Изменить канал';
-      handler = (values) => {
-        editChannel({ id, channel: values });
-      };
-      break;
-    default:
-      title = 'Окно';
-  }
 
   const shcema = object().shape({
     name: string()
@@ -73,27 +48,32 @@ const CustomModal = () => {
     initialValues,
     validationSchema: shcema,
     onSubmit: (values) => {
-      formik.resetForm();
-      handler(values);
-      closeHandler();
+      addChannel(values)
+        .unwrap()
+        .then(() => {
+          closeHandler(formik);
+        })
+        .catch(() => {
+          formik.errors.name = 'Ошибка сети';
+        });
     },
   });
 
   return (
-    <Modal show={opened} onHide={closeHandler}>
+    <Modal show={isOpened} onHide={() => closeHandler(formik)}>
       <Modal.Header closeButton>
-        <Modal.Title>{title}</Modal.Title>
+        <Modal.Title>Добавить канал</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={formik.handleSubmit}>
-          <Form.Group has-validation>
+          <Form.Group has-validation="true">
             <Form.Control
               id="name"
               type="text"
               placeholder="Введите название"
               onChange={formik.handleChange}
               value={formik.values.name}
-              isInvalid={formik.errors.name}
+              isInvalid={!!formik.errors.name}
               autoFocus
             />
             <Form.Control.Feedback type="invalid">
@@ -103,20 +83,19 @@ const CustomModal = () => {
         </Form>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="secondary" onClick={closeHandler}>
+        <Button variant="secondary" onClick={() => closeHandler(formik)}>
           Отмена
         </Button>
         <Button
           variant="primary"
-          onClick={(e) => {
-            formik.handleSubmit(e);
-          }}
+          disabled={isLoadingAdd || isLoadingGet}
+          onClick={formik.handleSubmit}
         >
-          Отправить
+          { isLoadingAdd ? 'Отправка' : 'Отправить'}
         </Button>
       </Modal.Footer>
     </Modal>
   );
 };
 
-export default CustomModal;
+export default AddModal;

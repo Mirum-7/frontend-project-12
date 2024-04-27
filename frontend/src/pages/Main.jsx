@@ -2,15 +2,12 @@ import { Button, Container } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 import ChannelNavList from '../Components/ChannelNavList';
 import Chat from '../Components/Chat';
-import CustomModal from '../Components/CustomModal';
 import CustomNavbar from '../Components/CustomNavBar';
 import { open } from '../store/slices/modal';
-
-const modals = {
-  add: 'a',
-  edit: 'b',
-  remove: 'c',
-};
+import AddModal from '../Components/modals/add';
+import EditModal from '../Components/modals/edit';
+import RemoveModal from '../Components/modals/remove';
+import ErrorModal from '../Components/modals/error';
 
 const Main = () => {
   const dispatch = useDispatch();
@@ -44,7 +41,10 @@ const Main = () => {
           </main>
         </Container>
       </div>
-      <CustomModal />
+      <AddModal />
+      <EditModal />
+      <RemoveModal />
+      <ErrorModal />
     </>
   );
 };

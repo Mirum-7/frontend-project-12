@@ -11,7 +11,7 @@ import {
   getSelectedId,
   select,
 } from '../store/slices/selected';
-import { useGetChannelsQuery, useRemoveChannelMutation } from '../store/slices/channels';
+import { useGetChannelsQuery } from '../store/slices/channels';
 import { open } from '../store/slices/modal';
 
 const ChannelNavItem = ({
@@ -30,12 +30,8 @@ const ChannelNavItem = ({
     dispatch(select({ id }));
   };
 
-  const [
-    removeChannel,
-  ] = useRemoveChannelMutation();
-
   const removeHandler = () => {
-    removeChannel(id);
+    dispatch(open(`remove-${id}`));
   };
 
   const editHandler = () => {

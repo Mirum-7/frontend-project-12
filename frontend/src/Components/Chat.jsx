@@ -32,19 +32,14 @@ const MessageBox = () => {
   const selectedChannelId = useSelector(getSelectedId);
   const { data, isLoading, isError } = useGetMessagesQuery();
 
-  if (isError) {
-    return null;
+  let messages = [];
+  if (!isLoading && !isError) {
+    messages = data
+      .filter((message) => message.channelId === selectedChannelId)
+      .map((message) => (
+        <Message key={message.id} username={message.username}>{message.body}</Message>
+      ));
   }
-
-  if (isLoading) {
-    return null;
-  }
-
-  const messages = data
-    .filter((message) => message.channelId === selectedChannelId)
-    .map((message) => (
-      <Message key={message.id} username={message.username}>{message.body}</Message>
-    ));
 
   return (
     <div className="overflow-auto px-5">
@@ -123,17 +118,16 @@ const Chat = () => {
     isError: isErrorChannels,
   } = useGetChannelsQuery();
 
-  if (isErrorMessages || isErrorChannels) {
-    return null;
+  let length = 0;
+  let channelName = '';
+  if (!isLoadingMessages
+    && !isLoadingChannels
+    && !isErrorMessages
+    && !isErrorChannels
+  ) {
+    channelName = channels.find((channel) => channel.id === selectedId).name;
+    length = messages.filter((message) => message.channelId === selectedId).length;
   }
-
-  if (isLoadingMessages || isLoadingChannels) {
-    return null;
-  }
-
-  const { name: channelName } = channels.find((channel) => channel.id === selectedId);
-
-  const { length } = messages.filter((message) => message.channelId === selectedId);
 
   const getVariant = (count) => {
     if (count === 1) {

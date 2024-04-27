@@ -1,6 +1,6 @@
 import { Button } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
-import { logOut } from '../store/slices/auth';
+import { logOut } from '../../store/slices/auth';
 
 const ExitButton = () => {
   const dispatch = useDispatch();

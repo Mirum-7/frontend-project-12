@@ -3,10 +3,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { logIn, getLoggedIn } from '../store/slices/auth';
 
+const freePages = [
+  '/login',
+  '/signup',
+];
+
 const Redirect = ({ children }) => {
   const navigate = useNavigate();
   const location = useLocation();
-
   const dispatch = useDispatch();
 
   const loggedIn = useSelector(getLoggedIn);
@@ -20,7 +24,7 @@ const Redirect = ({ children }) => {
 
     if (data && data.token) {
       dispatch(logIn(data));
-    } else {
+    } else if (!freePages.includes(location.pathname)) {
       navigate('/login', {
         state: {
           from: location,

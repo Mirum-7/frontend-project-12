@@ -1,19 +1,25 @@
 import {
-  Navbar,
   Container,
   Nav,
+  Navbar,
 } from 'react-bootstrap';
-import ExitButton from './ExitButton';
+import { useSelector } from 'react-redux';
+import { getLoggedIn } from '../store/slices/auth';
+import ExitButton from './buttons/Exit';
 
-const CustomNavbar = () => (
-  <Navbar className="bg-white shadow-sm">
-    <Container>
-      <Navbar.Brand>React chat</Navbar.Brand>
-      <Nav>
-        <ExitButton />
-      </Nav>
-    </Container>
-  </Navbar>
-);
+const CustomNavbar = () => {
+  const loggedIn = useSelector(getLoggedIn);
+
+  return (
+    <Navbar className="bg-white shadow-sm">
+      <Container>
+        <Navbar.Brand>Hexlet chat</Navbar.Brand>
+        <Nav>
+          {loggedIn ? <ExitButton /> : null}
+        </Nav>
+      </Container>
+    </Navbar>
+  );
+};
 
 export default CustomNavbar;

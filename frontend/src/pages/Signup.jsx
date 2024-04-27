@@ -4,11 +4,11 @@ import {
   Row,
 } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
-import LoginForm from '../Components/LoginForm';
 import { getLoggedIn } from '../store/slices/auth';
+import SignupForm from '../Components/SignupForm';
 import ToMainButton from '../Components/buttons/ToMain';
 
-const Login = () => {
+const Signup = () => {
   const loggedIn = useSelector(getLoggedIn);
 
   return (
@@ -24,7 +24,7 @@ const Login = () => {
             </>
           ) : (
             <Card.Body>
-              <LoginForm />
+              <SignupForm />
             </Card.Body>
           )}
         </Card>
@@ -33,4 +33,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Signup;

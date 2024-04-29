@@ -14,6 +14,7 @@ import {
   getSelectedId,
   select,
 } from '../store/slices/selected';
+import filter from '../wordFilter';
 
 const ChannelNavItem = ({
   title,
@@ -21,6 +22,8 @@ const ChannelNavItem = ({
   removable,
 }) => {
   const { t } = useTranslation();
+
+  title = filter.clean(title);
 
   const dispatch = useDispatch();
 

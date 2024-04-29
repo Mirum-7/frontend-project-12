@@ -1,4 +1,5 @@
 import { useFormik } from 'formik';
+import { useEffect, useRef } from 'react';
 import {
   Button,
   Form,
@@ -12,6 +13,7 @@ import { getUsername } from '../store/slices/auth';
 import { useGetChannelsQuery } from '../store/slices/channels';
 import { useAddMessageMutation, useGetMessagesQuery } from '../store/slices/messages';
 import { getSelectedId } from '../store/slices/selected';
+import filter from '../wordFilter';
 
 const Message = ({ username, children }) => (
   <div className="text-break mb-2">
@@ -19,13 +21,19 @@ const Message = ({ username, children }) => (
       {username}
     </b>
     :&nbsp;
-    {children}
+    {filter.clean(children)}
   </div>
 );
 
 const MessageBox = () => {
+  const ref = useRef();
+
   const selectedChannelId = useSelector(getSelectedId);
   const { data, isLoading, isError } = useGetMessagesQuery();
+
+  useEffect(() => {
+    ref.current.scrollTo(0, ref.current.scrollHeight);
+  }, [data]);
 
   let messages = [];
   if (!isLoading && !isError) {
@@ -37,7 +45,7 @@ const MessageBox = () => {
   }
 
   return (
-    <div className="overflow-auto px-5">
+    <div className="overflow-auto px-5" ref={ref}>
       {messages}
     </div>
   );
@@ -116,10 +124,6 @@ const Chat = () => {
     isLoading: isLoadingChannels,
     isError: isErrorChannels,
   } = useGetChannelsQuery();
-
-  if (isErrorChannels || isErrorMessages) {
-    toast.error('errors.network');
-  }
 
   let messageCount = 0;
   let channelName = '';

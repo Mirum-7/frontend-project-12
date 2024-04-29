@@ -1,21 +1,22 @@
+import { ToastContainer } from 'react-toastify';
 import {
   BrowserRouter,
   Outlet,
   Route,
   Routes,
 } from 'react-router-dom';
-import Error404 from '../pages/Error404';
-import Login from '../pages/Login';
-import Main from '../pages/Main';
-import Signup from '../pages/Signup';
+import 'react-toastify/dist/ReactToastify.min.css';
+import {
+  Error404,
+  Login,
+  Main,
+  Signup,
+} from '../pages';
 import StoreProvider from '../providers/Store';
 import '../styles/index.scss';
 import CustomNavbar from './CustomNavBar';
 import Redirect from './Redirect';
-import AddModal from './modals/add';
-import EditModal from './modals/edit';
-import ErrorModal from './modals/error.nouse';
-import RemoveModal from './modals/remove';
+import { AddModal, EditModal, RemoveModal } from './modals';
 
 import '../locals';
 
@@ -36,7 +37,18 @@ const App = () => (
                 <AddModal />
                 <EditModal />
                 <RemoveModal />
-                <ErrorModal />
+                <ToastContainer
+                  position="top-right"
+                  autoClose={2500}
+                  hideProgressBar={false}
+                  newestOnTop
+                  closeOnClick
+                  rtl={false}
+                  pauseOnFocusLoss
+                  draggable={false}
+                  pauseOnHover={false}
+                  theme="light"
+                />
               </>
             )}
           >

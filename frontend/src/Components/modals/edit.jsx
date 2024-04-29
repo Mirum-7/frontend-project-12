@@ -2,6 +2,7 @@ import { useFormik } from 'formik';
 import { Button, Form, Modal } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 import { object, string } from 'yup';
 import { useEditChannelMutation, useGetChannelsQuery } from '../../store/slices/channels';
 import { close, getOpened, getType } from '../../store/slices/modal';
@@ -13,6 +14,8 @@ const EditModal = () => {
   const status = useSelector(getOpened);
   const [type, id] = useSelector(getType).split('-');
 
+  const isOpened = status && type === 'edit';
+
   const [
     editChannel,
     { isLoading: isLoadingAdd },
@@ -23,8 +26,6 @@ const EditModal = () => {
   if (!isLoadingGet && !isErrorGet) {
     names = data.map((channel) => channel.name);
   }
-
-  const isOpened = status && type === 'edit';
 
   const closeHandler = (formik) => {
     dispatch(close());
@@ -50,8 +51,8 @@ const EditModal = () => {
       editChannel({ id, channel: values })
         .unwrap()
         .then(() => {
-          formik.resetForm();
-          closeHandler();
+          toast.success(t('toast.success.editChannel'));
+          closeHandler(formik);
         })
         .catch(() => {
           formik.errors.name = t('errors.network');

@@ -9,6 +9,7 @@ import login from './login';
 import modals from './modals';
 import navbar from './navbar';
 import signup from './signup';
+import toast from './toast';
 
 const translation = {
   errors,
@@ -22,6 +23,7 @@ const translation = {
   links,
   info,
   aside,
+  toast,
 };
 
 export default { translation };

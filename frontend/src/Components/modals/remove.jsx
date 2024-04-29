@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Button, Modal } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 import { useRemoveChannelMutation } from '../../store/slices/channels';
 import { close, getOpened, getType } from '../../store/slices/modal';
 
@@ -41,6 +42,7 @@ const RemoveModal = () => {
               .unwrap()
               .then(() => {
                 closeHandler();
+                toast.success(t('toast.success.removeChannel'));
               })
               .catch(() => {
                 setError(t('errors.network'));

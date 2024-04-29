@@ -1,5 +1,4 @@
 import { useFormik } from 'formik';
-import { useEffect } from 'react';
 import {
   Button,
   Form,
@@ -7,6 +6,7 @@ import {
 } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 import { object, string } from 'yup';
 import { getUsername } from '../store/slices/auth';
 import { useGetChannelsQuery } from '../store/slices/channels';
@@ -50,14 +50,8 @@ const MessageField = () => {
   const username = useSelector(getUsername);
   const [
     addMessage,
-    { isError, isLoading },
+    { isLoading },
   ] = useAddMessageMutation();
-
-  useEffect(() => {
-    if (isError) {
-      alert(t('chat.errors.sendMessage'));
-    }
-  }, [isError, t]);
 
   const shcema = object().shape({
     message: string().required(),
@@ -73,8 +67,13 @@ const MessageField = () => {
         body: values.message,
         channelId: selectedChannelId,
         username,
-      });
-      formik.resetForm();
+      }).unwrap()
+        .then(() => {
+          formik.resetForm();
+        })
+        .catch(() => {
+          toast.error(t('toast.errors.sendMessage'));
+        });
     },
   });
 
@@ -117,6 +116,10 @@ const Chat = () => {
     isLoading: isLoadingChannels,
     isError: isErrorChannels,
   } = useGetChannelsQuery();
+
+  if (isErrorChannels || isErrorMessages) {
+    toast.error('errors.network');
+  }
 
   let messageCount = 0;
   let channelName = '';

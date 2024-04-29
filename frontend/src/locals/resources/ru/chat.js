@@ -1,7 +1,4 @@
 const chat = {
-  errors: {
-    sendMessage: 'Не удалось отправиться сообщение',
-  },
   field: {
     placeholders: {
       message: 'Введите сообщение',

@@ -2,6 +2,7 @@ import { useFormik } from 'formik';
 import { Button, Form, Modal } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 import { object, string } from 'yup';
 import { useAddChannelMutation, useGetChannelsQuery } from '../../store/slices/channels';
 import {
@@ -17,6 +18,8 @@ const AddModal = () => {
   const status = useSelector(getOpened);
   const type = useSelector(getType);
 
+  const isOpened = status && type === 'add';
+
   const [
     addChannel,
     { isLoading: isLoadingAdd },
@@ -27,8 +30,6 @@ const AddModal = () => {
   if (!isLoadingGet && !isErrorGet) {
     names = data.map((channel) => channel.name);
   }
-
-  const isOpened = status && type === 'add';
 
   const closeHandler = (formik) => {
     dispatch(close());
@@ -54,6 +55,7 @@ const AddModal = () => {
       addChannel(values)
         .unwrap()
         .then(() => {
+          toast.success(t('toast.success.addChannel'));
           closeHandler(formik);
         })
         .catch(() => {

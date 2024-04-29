@@ -5,20 +5,23 @@ import {
   Nav,
   Placeholder,
 } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
+import { useGetChannelsQuery } from '../store/slices/channels';
+import { open } from '../store/slices/modal';
 import {
   getDefaultSelectedId,
   getSelectedId,
   select,
 } from '../store/slices/selected';
-import { useGetChannelsQuery } from '../store/slices/channels';
-import { open } from '../store/slices/modal';
 
 const ChannelNavItem = ({
   title,
   id,
   removable,
 }) => {
+  const { t } = useTranslation();
+
   const dispatch = useDispatch();
 
   const selected = useSelector(getSelectedId);
@@ -54,8 +57,8 @@ const ChannelNavItem = ({
         </Button>
         <Dropdown.Toggle variant={getVariant()} split />
         <Dropdown.Menu>
-          <Dropdown.Item onClick={editHandler}>Редактировать</Dropdown.Item>
-          <Dropdown.Item onClick={removeHandler}>Удалить</Dropdown.Item>
+          <Dropdown.Item onClick={editHandler}>{t('channelNavList.item.menu.edit')}</Dropdown.Item>
+          <Dropdown.Item onClick={removeHandler}>{t('channelNavList.item.menu.remove')}</Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>
     );

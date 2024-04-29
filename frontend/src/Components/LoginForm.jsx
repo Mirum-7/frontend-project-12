@@ -2,12 +2,15 @@ import axios from 'axios';
 import { useFormik } from 'formik';
 import { useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import routes from '../routes';
 import { logIn } from '../store/slices/auth';
 
 const LoginForm = () => {
+  const { t } = useTranslation();
+
   const [authFailed, setAuthFailed] = useState(false);
   const [errorMessage, setErrorMessage] = useState();
   const [isLoading, setIsLoading] = useState(false);
@@ -35,9 +38,9 @@ const LoginForm = () => {
         navigate(from);
       } catch (err) {
         if (err.isAxiosError && err.response?.status === 401) {
-          setErrorMessage('Неверный логин или пароль');
+          setErrorMessage(t('login.errors.incorrectData'));
         } else {
-          setErrorMessage('Ошибка сети');
+          setErrorMessage(t('errors.network'));
         }
         setAuthFailed(true);
       }
@@ -49,11 +52,11 @@ const LoginForm = () => {
     <Form onSubmit={formik.handleSubmit}>
       <fieldset>
         <Form.Group className="mb-3">
-          <Form.Label>Ваш ник</Form.Label>
+          <Form.Label>{t('login.labels.username')}</Form.Label>
           <Form.Control
             onChange={formik.handleChange}
             value={formik.values.username}
-            placeholder="Введите ник"
+            placeholder={t('login.placeholders.username')}
             name="username"
             id="username"
             autoComplete="username"
@@ -67,7 +70,7 @@ const LoginForm = () => {
           <Form.Control
             onChange={formik.handleChange}
             value={formik.values.password}
-            placeholder="Введите пароль"
+            placeholder={t('login.placeholders.password')}
             name="password"
             id="password"
             autoComplete="password"

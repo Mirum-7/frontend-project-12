@@ -4,18 +4,20 @@ import {
   Route,
   Routes,
 } from 'react-router-dom';
-import CustomNavbar from './CustomNavBar';
-import AddModal from './modals/add';
-import EditModal from './modals/edit';
-import ErrorModal from './modals/error';
-import RemoveModal from './modals/remove';
 import Error404 from '../pages/Error404';
 import Login from '../pages/Login';
 import Main from '../pages/Main';
 import Signup from '../pages/Signup';
 import StoreProvider from '../providers/Store';
 import '../styles/index.scss';
+import CustomNavbar from './CustomNavBar';
 import Redirect from './Redirect';
+import AddModal from './modals/add';
+import EditModal from './modals/edit';
+import ErrorModal from './modals/error.nouse';
+import RemoveModal from './modals/remove';
+
+import '../locals';
 
 const App = () => (
   <StoreProvider>

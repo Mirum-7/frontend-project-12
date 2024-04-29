@@ -1,11 +1,14 @@
 import { useFormik } from 'formik';
 import { Button, Form, Modal } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { object, string } from 'yup';
-import { close, getOpened, getType } from '../../store/slices/modal';
 import { useEditChannelMutation, useGetChannelsQuery } from '../../store/slices/channels';
+import { close, getOpened, getType } from '../../store/slices/modal';
 
 const EditModal = () => {
+  const { t } = useTranslation();
+
   const dispatch = useDispatch();
   const status = useSelector(getOpened);
   const [type, id] = useSelector(getType).split('-');
@@ -34,10 +37,10 @@ const EditModal = () => {
 
   const shcema = object().shape({
     name: string()
-      .required('Введите название')
-      .min(3, 'Название должно быть больше 3 символов')
-      .max(20, 'Название должно быть меньше 20 символов')
-      .notOneOf(names, 'Название должно быть уникальным'),
+      .required(t('modals.validation.required'))
+      .min(3, t('modals.validation.min'))
+      .max(20, t('modals.validation.max'))
+      .notOneOf(names, t('modals.validation.notOneOf')),
   });
 
   const formik = useFormik({
@@ -51,7 +54,7 @@ const EditModal = () => {
           closeHandler();
         })
         .catch(() => {
-          formik.errors.name = 'Ошибка сети';
+          formik.errors.name = t('errors.network');
         });
     },
   });
@@ -59,7 +62,7 @@ const EditModal = () => {
   return (
     <Modal show={isOpened} onHide={() => closeHandler(formik)}>
       <Modal.Header closeButton>
-        <Modal.Title>Переименовать канал</Modal.Title>
+        <Modal.Title>{t('modals.edit.title')}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={formik.handleSubmit}>
@@ -67,7 +70,7 @@ const EditModal = () => {
             <Form.Control
               id="name"
               type="text"
-              placeholder="Введите название"
+              placeholder={t('modals.placeholders.name')}
               onChange={formik.handleChange}
               value={formik.values.name}
               isInvalid={!!formik.errors.name}
@@ -81,14 +84,14 @@ const EditModal = () => {
       </Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" onClick={() => closeHandler(formik)}>
-          Отмена
+          {t('modals.buttons.close')}
         </Button>
         <Button
           variant="primary"
           disabled={isLoadingAdd || isLoadingGet}
           onClick={formik.handleSubmit}
         >
-          { isLoadingAdd ? 'Отправка' : 'Отправить'}
+          { isLoadingAdd ? t('modals.buttons.loading') : t('modals.buttons.submit')}
         </Button>
       </Modal.Footer>
     </Modal>

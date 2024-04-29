@@ -2,26 +2,16 @@ import axios from 'axios';
 import { useFormik } from 'formik';
 import { useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { object, ref, string } from 'yup';
 import routes from '../routes';
 import { logIn } from '../store/slices/auth';
 
-const signupSchame = object().shape({
-  username: string()
-    .min(3, 'Минимум 3 символов')
-    .max(20, 'Максимум 20 символов')
-    .required('Обязательное поле'),
-  password: string()
-    .min(6, 'Минимум 6 символов')
-    .required('Обязательное поле'),
-  passwordConfirm: string()
-    .required('Обязательное поле')
-    .oneOf([ref('password')], 'Парольи должны совпадать'),
-});
-
 const SignupForm = () => {
+  const { t } = useTranslation();
+
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
@@ -29,6 +19,19 @@ const SignupForm = () => {
 
   const [signUpError, setSignupError] = useState();
   const [isLoading, setIsLoading] = useState(false);
+
+  const signupSchame = object().shape({
+    username: string()
+      .min(3, t('signup.validation.username.min'))
+      .max(20, t('signup.validation.username.max'))
+      .required(t('signup.validation.required')),
+    password: string()
+      .min(6, t('signup.validation.password.min'))
+      .required(t('signup.validation.required')),
+    passwordConfirm: string()
+      .required(t('signup.validation.required'))
+      .oneOf([ref('password')], t('signup.validation.passwordConfirm.oneOf')),
+  });
 
   const formik = useFormik({
     initialValues: {
@@ -50,9 +53,9 @@ const SignupForm = () => {
         navigate(from);
       } catch (err) {
         if (err.isAxiosError && err.response?.status === 409) {
-          setSignupError('Пользователь уже существует');
+          setSignupError(t('signup.errors.userExist'));
         } else {
-          setSignupError('Ошибка сети');
+          setSignupError(t('errors.network'));
         }
       }
       setIsLoading(false);
@@ -63,14 +66,14 @@ const SignupForm = () => {
     <Form onSubmit={formik.handleSubmit}>
       <fieldset>
         <Form.Group className="mb-3">
-          <Form.Label>Ваш ник</Form.Label>
+          <Form.Label>{t('signup.labels.username')}</Form.Label>
           <Form.Control
             onChange={(e) => {
               setSignupError(null);
               formik.handleChange(e);
             }}
             value={formik.values.username}
-            placeholder="Введите ник"
+            placeholder={t('signup.placeholders.username')}
             name="username"
             id="username"
             autoComplete="username"
@@ -83,11 +86,11 @@ const SignupForm = () => {
           </Form.Control.Feedback>
         </Form.Group>
         <Form.Group className="mb-3">
-          <Form.Label>Пароль</Form.Label>
+          <Form.Label>{t('signup.labels.password')}</Form.Label>
           <Form.Control
             onChange={formik.handleChange}
             value={formik.values.password}
-            placeholder="Введите пароль"
+            placeholder={t('signup.placeholders.password')}
             name="password"
             id="password"
             autoComplete="password"
@@ -100,11 +103,10 @@ const SignupForm = () => {
           </Form.Control.Feedback>
         </Form.Group>
         <Form.Group className="mb-3">
-          <Form.Label>Подтвердите пароль</Form.Label>
           <Form.Control
             onChange={formik.handleChange}
             value={formik.values.passwordConfirm}
-            placeholder="Повторите пароль"
+            placeholder={t('signup.placeholders.passwordConfirm')}
             name="passwordConfirm"
             id="passwordConfirm"
             autoComplete="passwordConfirm"
@@ -116,7 +118,7 @@ const SignupForm = () => {
             {formik.errors.passwordConfirm}
           </Form.Control.Feedback>
         </Form.Group>
-        <Button type="submit" variant="primary" disabled={isLoading}>Вход</Button>
+        <Button type="submit" variant="primary" disabled={isLoading}>{t('signup.submit')}</Button>
       </fieldset>
     </Form>
   );

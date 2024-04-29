@@ -1,7 +1,10 @@
 import { Button } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 const ToMainButton = () => {
+  const { t } = useTranslation();
+
   const navigate = useNavigate();
   return (
     <Button
@@ -12,7 +15,7 @@ const ToMainButton = () => {
       className="btn"
       variant="primary"
     >
-      На главную
+      {t('buttons.toMain')}
     </Button>
   );
 };

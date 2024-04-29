@@ -1,8 +1,11 @@
 import { Button } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { logOut } from '../../store/slices/auth';
 
 const ExitButton = () => {
+  const { t } = useTranslation();
+
   const dispatch = useDispatch();
 
   return (
@@ -15,7 +18,7 @@ const ExitButton = () => {
       className="btn"
       variant="outline-primary"
     >
-      Выйти
+      {t('buttons.logout')}
     </Button>
   );
 };

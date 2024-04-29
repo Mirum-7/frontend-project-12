@@ -5,6 +5,7 @@ import {
   Form,
   InputGroup,
 } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { object, string } from 'yup';
 import { getUsername } from '../store/slices/auth';
@@ -12,21 +13,15 @@ import { useGetChannelsQuery } from '../store/slices/channels';
 import { useAddMessageMutation, useGetMessagesQuery } from '../store/slices/messages';
 import { getSelectedId } from '../store/slices/selected';
 
-const Message = ({ username, children, error }) => {
-  if (error) {
-    return <div className="text-danger">Не удалось отправиться сообщение</div>;
-  }
-
-  return (
-    <div className="text-break mb-2">
-      <b>
-        {username}
-      </b>
-      :&nbsp;
-      {children}
-    </div>
-  );
-};
+const Message = ({ username, children }) => (
+  <div className="text-break mb-2">
+    <b>
+      {username}
+    </b>
+    :&nbsp;
+    {children}
+  </div>
+);
 
 const MessageBox = () => {
   const selectedChannelId = useSelector(getSelectedId);
@@ -49,18 +44,20 @@ const MessageBox = () => {
 };
 
 const MessageField = () => {
+  const { t } = useTranslation();
+
   const selectedChannelId = useSelector(getSelectedId);
   const username = useSelector(getUsername);
   const [
     addMessage,
-    { isError },
+    { isError, isLoading },
   ] = useAddMessageMutation();
 
   useEffect(() => {
     if (isError) {
-      alert('Не удалось отправить сообщение');
+      alert(t('chat.errors.sendMessage'));
     }
-  }, [isError]);
+  }, [isError, t]);
 
   const shcema = object().shape({
     message: string().required(),
@@ -87,7 +84,7 @@ const MessageField = () => {
         <Form.Control
           id="message"
           type="text"
-          placeholder="Введите сообщение"
+          placeholder={t('chat.field.placeholders.message')}
           onChange={formik.handleChange}
           value={formik.values.message}
           isInvalid={formik.errors.message}
@@ -97,8 +94,9 @@ const MessageField = () => {
           type="submit"
           variant="outline-secondary"
           className="border"
+          disabled={isLoading}
         >
-          Отправить
+          {t('chat.field.submit')}
         </Button>
       </InputGroup>
     </Form>
@@ -106,6 +104,8 @@ const MessageField = () => {
 };
 
 const Chat = () => {
+  const { t } = useTranslation();
+
   const selectedId = useSelector(getSelectedId);
   const {
     data: messages,
@@ -118,7 +118,7 @@ const Chat = () => {
     isError: isErrorChannels,
   } = useGetChannelsQuery();
 
-  let length = 0;
+  let messageCount = 0;
   let channelName = '';
   if (!isLoadingMessages
     && !isLoadingChannels
@@ -126,24 +126,14 @@ const Chat = () => {
     && !isErrorChannels
   ) {
     channelName = channels.find((channel) => channel.id === selectedId).name;
-    length = messages.filter((message) => message.channelId === selectedId).length;
+    messageCount = messages.filter((message) => message.channelId === selectedId).length;
   }
-
-  const getVariant = (count) => {
-    if (count === 1) {
-      return 'сообщение';
-    }
-    if (count < 5 && count !== 0) {
-      return 'сообщения';
-    }
-    return 'сообщений';
-  };
 
   return (
     <div className="d-flex flex-column h-100 w-100">
       <div className="bg-light mb-4 p-3 shadow-sm small">
         <p className="m-0"><b>{`# ${channelName}`}</b></p>
-        <span className="text-muted">{`${length} ${getVariant(length)}`}</span>
+        <span className="text-muted">{t('chat.header.messageCount.key', { count: messageCount })}</span>
       </div>
       <MessageBox />
       <div className="mt-auto px-5 py-3">

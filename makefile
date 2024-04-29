@@ -2,13 +2,16 @@ build:
 	rm -rf frontend/build
 	npm run build
 
-start-server:
+start:
+	npm start
+
+start-serve:
 	npm start
 
 start-client:
 	cd frontend; npm start
 
-start:
+start-app:
 	make -j 2 start-client start-server
 
 lint:

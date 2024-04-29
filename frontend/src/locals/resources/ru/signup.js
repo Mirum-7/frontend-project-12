@@ -1,14 +1,13 @@
 const signup = {
   validation: {
     username: {
-      min: 'Минимум 3 символов',
-      max: 'Максимум 20 символов',
+      range: 'От 3 до 20 символов',
     },
     password: {
-      min: 'Минимум 6 символов',
+      min: 'Не менее 6 символов',
     },
     passwordConfirm: {
-      oneOf: 'Парольи должны совпадать',
+      oneOf: 'Пароли должны совпадать',
     },
     required: 'Обязательное поле',
   },
@@ -17,8 +16,9 @@ const signup = {
   },
   submit: 'Зарегистрироваться',
   labels: {
-    username: 'Ваш ник',
+    username: 'Имя пользователя',
     password: 'Пароль',
+    passwordConfirm: 'Подтвердите пароль',
   },
   placeholders: {
     username: 'Введите ник',

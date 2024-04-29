@@ -1,8 +1,8 @@
 const login = {
   errors: {
-    incorrectData: 'Неверный логин или пароль',
+    incorrectData: 'Неверные имя пользователя или пароль',
   },
-  submit: 'Вход',
+  submit: 'Войти',
   labels: {
     username: 'Ваш ник',
     password: 'Пароль',

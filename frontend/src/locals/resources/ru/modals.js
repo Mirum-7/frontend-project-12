@@ -11,7 +11,7 @@ const modals = {
     notOneOf: 'Название должно быть уникальным',
   },
   placeholders: {
-    name: 'Введите название',
+    name: 'Имя канала',
   },
   add: {
     title: 'Добавить канал',

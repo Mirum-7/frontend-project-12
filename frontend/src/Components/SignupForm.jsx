@@ -22,8 +22,8 @@ const SignupForm = () => {
 
   const signupSchame = object().shape({
     username: string()
-      .min(3, t('signup.validation.username.min'))
-      .max(20, t('signup.validation.username.max'))
+      .min(3, t('signup.validation.username.range'))
+      .max(20, t('signup.validation.username.range'))
       .required(t('signup.validation.required')),
     password: string()
       .min(6, t('signup.validation.password.min'))
@@ -103,6 +103,7 @@ const SignupForm = () => {
           </Form.Control.Feedback>
         </Form.Group>
         <Form.Group className="mb-3">
+          <Form.Label>{t('signup.labels.passwordConfirm')}</Form.Label>
           <Form.Control
             onChange={formik.handleChange}
             value={formik.values.passwordConfirm}

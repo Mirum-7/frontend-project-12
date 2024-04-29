@@ -28,6 +28,7 @@ const SignupForm = () => {
   const location = useLocation();
 
   const [signUpError, setSignupError] = useState();
+  const [isLoading, setIsLoading] = useState(false);
 
   const formik = useFormik({
     initialValues: {
@@ -37,6 +38,7 @@ const SignupForm = () => {
     },
     validationSchema: signupSchame,
     onSubmit: async (values) => {
+      setIsLoading(true);
       try {
         const response = await axios.post(routes.signup, values);
 
@@ -53,6 +55,7 @@ const SignupForm = () => {
           setSignupError('Ошибка сети');
         }
       }
+      setIsLoading(false);
     },
   });
 
@@ -72,6 +75,7 @@ const SignupForm = () => {
             id="username"
             autoComplete="username"
             isInvalid={formik.errors.username || signUpError}
+            disabled={isLoading}
             required
           />
           <Form.Control.Feedback type="invalid">
@@ -88,6 +92,7 @@ const SignupForm = () => {
             id="password"
             autoComplete="password"
             isInvalid={formik.errors.password}
+            disabled={isLoading}
             required
           />
           <Form.Control.Feedback type="invalid">
@@ -104,13 +109,14 @@ const SignupForm = () => {
             id="passwordConfirm"
             autoComplete="passwordConfirm"
             isInvalid={formik.errors.passwordConfirm}
+            disabled={isLoading}
             required
           />
           <Form.Control.Feedback type="invalid">
             {formik.errors.passwordConfirm}
           </Form.Control.Feedback>
         </Form.Group>
-        <Button type="submit" variant="primary">Вход</Button>
+        <Button type="submit" variant="primary" disabled={isLoading}>Вход</Button>
       </fieldset>
     </Form>
   );

@@ -7,19 +7,10 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import routes from '../routes';
 import { logIn } from '../store/slices/auth';
 
-// const signupSchame = object().shape({
-//   username: string()
-//     .min(3, 'Минимум 3 буквы')
-//     .max(30, 'Максимум 30 букв')
-//     .required('Обязательное поле'),
-//   password: string()
-//     .min(5, 'Минимум 5 букв')
-//     .required('Обязательное поле'),
-// });
-
 const LoginForm = () => {
   const [authFailed, setAuthFailed] = useState(false);
   const [errorMessage, setErrorMessage] = useState();
+  const [isLoading, setIsLoading] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -31,8 +22,8 @@ const LoginForm = () => {
       username: '',
       password: '',
     },
-    // validationSchema: signupSchame,
     onSubmit: async (values) => {
+      setIsLoading(true);
       try {
         const response = await axios.post(routes.login, values);
 
@@ -50,6 +41,7 @@ const LoginForm = () => {
         }
         setAuthFailed(true);
       }
+      setIsLoading(false);
     },
   });
 
@@ -66,6 +58,7 @@ const LoginForm = () => {
             id="username"
             autoComplete="username"
             isInvalid={authFailed}
+            disabled={isLoading}
             required
           />
         </Form.Group>
@@ -79,13 +72,14 @@ const LoginForm = () => {
             id="password"
             autoComplete="password"
             isInvalid={authFailed}
+            disabled={isLoading}
             required
           />
           <Form.Control.Feedback type="invalid">
             {errorMessage}
           </Form.Control.Feedback>
         </Form.Group>
-        <Button type="submit" variant="primary">Вход</Button>
+        <Button type="submit" variant="primary" disabled={isLoading}>Вход</Button>
       </fieldset>
     </Form>
   );

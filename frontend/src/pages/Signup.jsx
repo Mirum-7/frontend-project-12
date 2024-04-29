@@ -4,6 +4,7 @@ import {
   Row,
 } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { getLoggedIn } from '../store/slices/auth';
 import SignupForm from '../Components/SignupForm';
 import ToMainButton from '../Components/buttons/ToMain';
@@ -27,6 +28,9 @@ const Signup = () => {
               <SignupForm />
             </Card.Body>
           )}
+          <Card.Footer className="text-center">
+            <Link to="/login">Войти</Link>
+          </Card.Footer>
         </Card>
       </Col>
     </Row>

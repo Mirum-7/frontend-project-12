@@ -19,47 +19,50 @@ import Redirect from './Redirect';
 import { AddModal, EditModal, RemoveModal } from './modals';
 
 import '../locals';
+import RollbarProvider from '../providers/rollbar';
 
 const App = () => (
-  <StoreProvider>
-    <BrowserRouter>
-      <Redirect>
-        <Routes>
-          <Route path="*" element={<Error404 />} />
-          <Route
-            path="/"
-            element={(
-              <>
-                <div className="d-flex flex-column h-100">
-                  <CustomNavbar />
-                  <Outlet />
-                </div>
-                <AddModal />
-                <EditModal />
-                <RemoveModal />
-                <ToastContainer
-                  position="top-right"
-                  autoClose={2500}
-                  hideProgressBar={false}
-                  newestOnTop
-                  closeOnClick
-                  rtl={false}
-                  pauseOnFocusLoss
-                  draggable={false}
-                  pauseOnHover={false}
-                  theme="light"
-                />
-              </>
-            )}
-          >
-            <Route path="" element={<Main />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<Signup />} />
-          </Route>
-        </Routes>
-      </Redirect>
-    </BrowserRouter>
-  </StoreProvider>
+  <RollbarProvider>
+    <StoreProvider>
+      <BrowserRouter>
+        <Redirect>
+          <Routes>
+            <Route path="*" element={<Error404 />} />
+            <Route
+              path="/"
+              element={(
+                <>
+                  <div className="d-flex flex-column h-100">
+                    <CustomNavbar />
+                    <Outlet />
+                  </div>
+                  <AddModal />
+                  <EditModal />
+                  <RemoveModal />
+                  <ToastContainer
+                    position="top-right"
+                    autoClose={2500}
+                    hideProgressBar={false}
+                    newestOnTop
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable={false}
+                    pauseOnHover={false}
+                    theme="light"
+                  />
+                </>
+              )}
+            >
+              <Route path="" element={<Main />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/signup" element={<Signup />} />
+            </Route>
+          </Routes>
+        </Redirect>
+      </BrowserRouter>
+    </StoreProvider>
+  </RollbarProvider>
 );
 
 export default App;

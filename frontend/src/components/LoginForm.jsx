@@ -35,7 +35,7 @@ const LoginForm = () => {
 
         navigate(urls.main);
       } catch (err) {
-        if (err.isAxiosError && err.response?.status === 401) {
+        if (err?.status === 401) {
           setErrorMessage(t('login.errors.incorrectData'));
         } else {
           setErrorMessage(t('errors.network'));

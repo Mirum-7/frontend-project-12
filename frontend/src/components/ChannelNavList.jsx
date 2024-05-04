@@ -27,7 +27,7 @@ const ChannelButton = ({
   <Button
     variant={variant}
     onClick={handler}
-    className="w-100 text-start text-truncate"
+    className="w-100 text-start text-truncate rounded-0"
     role={role}
   >
     {`# ${title}`}

@@ -98,8 +98,7 @@ const MessageField = () => {
         channelId: selectedChannelId,
         username,
       }).unwrap()
-        .then((response) => {
-          console.log(response);
+        .then(() => {
           formik.resetForm();
           ref.current.focus();
         })

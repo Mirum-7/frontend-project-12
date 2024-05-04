@@ -80,7 +80,7 @@ const ChannelNavItem = ({
           title={cleanedTitle}
           variant={getVariant()}
           handler={selectHandler}
-          role={title}
+          role={cleanedTitle}
         />
         <Dropdown.Toggle variant={getVariant()} split />
         <Dropdown.Menu>

@@ -1,5 +1,5 @@
 const buttons = {
-  addChannel: 'Добавить',
+  addChannel: '+',
   logout: 'Выйти',
   toMain: 'На главную',
 };

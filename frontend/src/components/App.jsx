@@ -14,7 +14,7 @@ import {
 } from '../pages/index.jsx';
 import AuthProvider from '../providers/auth.jsx';
 import RollbarProvider from '../providers/rollbar.jsx';
-import StoreProvider from '../providers/store.jsx';
+import StoreProvider from '../providers/store123.jsx';
 import '../styles/index.scss';
 import urls from '../urls.js';
 import CustomNavbar from './CustomNavBar.jsx';

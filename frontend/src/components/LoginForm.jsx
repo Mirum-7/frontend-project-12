@@ -52,7 +52,6 @@ const LoginForm = () => {
     <Form onSubmit={formik.handleSubmit}>
       <fieldset>
         <Form.Group className="mb-3">
-          <Form.Label>{t('login.labels.username')}</Form.Label>
           <Form.Control
             onChange={formik.handleChange}
             value={formik.values.username}
@@ -66,7 +65,6 @@ const LoginForm = () => {
           />
         </Form.Group>
         <Form.Group className="mb-3">
-          <Form.Label>Пароль</Form.Label>
           <Form.Control
             onChange={formik.handleChange}
             value={formik.values.password}

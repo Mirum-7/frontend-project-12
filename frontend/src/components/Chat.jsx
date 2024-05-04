@@ -146,7 +146,7 @@ const Chat = () => {
     data: channels,
   } = useGetChannelsQuery();
 
-  const channelName = channels?.find((channel) => channel.id === selectedId).name;
+  const channelName = channels?.find((channel) => channel.id === selectedId)?.name;
   const messageCount = messages?.filter((message) => message.channelId === selectedId).length;
 
   return (

@@ -48,8 +48,8 @@ const AddModal = () => {
   const shceme = object().shape({
     name: string()
       .required(t('modals.validation.required'))
-      .min(3, t('modals.validation.min'))
-      .max(20, t('modals.validation.max'))
+      .min(3, t('modals.validation.range'))
+      .max(20, t('modals.validation.range'))
       .notOneOf(names, t('modals.validation.notOneOf')),
   });
 

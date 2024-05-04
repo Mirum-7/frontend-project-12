@@ -20,3 +20,6 @@ lint:
 install: 
 	npm install
 	cd frontend && npm install
+
+
+deploy: install build

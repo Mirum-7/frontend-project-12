@@ -1,7 +1,7 @@
 const toast = {
   success: {
     addChannel: 'Канал создан',
-    removeChannel: 'Канал удален',
+    removeChannel: 'Канал удалён',
     editChannel: 'Канал переименован',
   },
   errors: {

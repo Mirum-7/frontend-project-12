@@ -1,8 +1,8 @@
 import { Button, Container } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
-import ChannelNavList from '../components/ChannelNavList';
-import Chat from '../components/Chat';
+import ChannelNavList from '../components123/ChannelNavList';
+import Chat from '../components123/Chat';
 import { open } from '../store/slices/modal';
 
 const Main = () => {

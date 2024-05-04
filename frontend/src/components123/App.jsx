@@ -1,25 +1,25 @@
 import {
-  BrowserRouter as Router,
   Route,
+  BrowserRouter as Router,
   Routes,
 } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
-import '../locals';
+import '../locals/index.js';
 import {
   Error404,
   Login,
   Main,
   Signup,
-} from '../pages';
+} from '../pages/index.jsx';
+import AuthProvider from '../providers/auth.jsx';
+import RollbarProvider from '../providers/rollbar.jsx';
 import StoreProvider from '../providers/store.jsx';
-import RollbarProvider from '../providers/rollbar';
 import '../styles/index.scss';
-import urls from '../urls';
-import CustomNavbar from './CustomNavBar';
-import RenderModals from './modals';
-import AuthProvider from '../providers/auth';
+import urls from '../urls.js';
+import CustomNavbar from './CustomNavBar.jsx';
 import PrivateRoute from './PrivateRoute.jsx';
+import RenderModals from './modals/index.jsx';
 
 const App = () => (
   <RollbarProvider>

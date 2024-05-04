@@ -5,10 +5,10 @@ import {
 } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import SignupForm from '../components/SignupForm';
-import ToMainButton from '../components/buttons/toMain';
+import LoggedIn from '../components123/LoggedIn';
+import SignupForm from '../components123/SignupForm';
+import ToMainButton from '../components123/buttons/toMain';
 import urls from '../urls';
-import LoggedIn from '../components/LoggedIn';
 
 const Signup = () => {
   const { t } = useTranslation();

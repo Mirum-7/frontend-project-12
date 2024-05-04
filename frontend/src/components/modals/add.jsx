@@ -11,6 +11,7 @@ import {
   getOpened,
   getType,
 } from '../../store/slices/modal';
+import { select } from '../../store/slices/selected';
 
 const AddModal = () => {
   const { t } = useTranslation();
@@ -59,8 +60,9 @@ const AddModal = () => {
     onSubmit: (values) => {
       addChannel(values)
         .unwrap()
-        .then(() => {
+        .then((response) => {
           toast.success(t('toast.success.addChannel'));
+          dispatch(select(response));
           closeHandler(formik);
         })
         .catch(() => {

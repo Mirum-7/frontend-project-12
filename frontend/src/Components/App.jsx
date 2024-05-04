@@ -1,6 +1,5 @@
 import {
-  BrowserRouter,
-  Outlet,
+  BrowserRouter as Router,
   Route,
   Routes,
 } from 'react-router-dom';
@@ -13,31 +12,29 @@ import {
   Main,
   Signup,
 } from '../pages';
-import StoreProvider from '../providers/Store';
+import StoreProvider from '../providers/store.jsx';
 import RollbarProvider from '../providers/rollbar';
 import '../styles/index.scss';
 import urls from '../urls';
 import CustomNavbar from './CustomNavBar';
-import Redirect from './Redirect';
 import RenderModals from './modals';
 import AuthProvider from '../providers/auth';
+import PrivateRoute from './PrivateRoute.jsx';
 
 const App = () => (
   <RollbarProvider>
     <StoreProvider>
       <AuthProvider>
-        <BrowserRouter>
-          <Redirect>
+        <Router>
+          <CustomNavbar />
+          <div className="d-flex flex-column h-100">
             <Routes>
               <Route path="*" element={<Error404 />} />
               <Route
                 path={urls.main}
                 element={(
-                  <>
-                    <div className="d-flex flex-column h-100">
-                      <CustomNavbar />
-                      <Outlet />
-                    </div>
+                  <PrivateRoute>
+                    <Main />
                     <RenderModals />
                     <ToastContainer
                       position="top-right"
@@ -51,16 +48,14 @@ const App = () => (
                       pauseOnHover={false}
                       theme="light"
                     />
-                  </>
+                  </PrivateRoute>
                 )}
-              >
-                <Route path="" element={<Main />} />
-                <Route path={urls.login} element={<Login />} />
-                <Route path={urls.signup} element={<Signup />} />
-              </Route>
+              />
+              <Route path={urls.login} element={<Login />} />
+              <Route path={urls.signup} element={<Signup />} />
             </Routes>
-          </Redirect>
-        </BrowserRouter>
+          </div>
+        </Router>
       </AuthProvider>
     </StoreProvider>
   </RollbarProvider>

@@ -1,9 +1,7 @@
 import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { getLoggedIn, logIn } from '../store/slices/auth';
-import urls from '../urls';
 import useAuth from '../hooks/auth';
+import urls from '../urls';
 
 const freePages = [
   urls.login,
@@ -13,21 +11,19 @@ const freePages = [
 const Redirect = ({ children }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const dispatch = useDispatch();
-
   const auth = useAuth();
 
-  const loggedIn = useSelector(getLoggedIn);
+  const { loggedIn } = auth;
 
   useEffect(() => {
     if (loggedIn) {
       return;
     }
 
-    const data = auth.getTokenFromStorage();
+    const data = auth.getDataFromStorage();
 
     if (data && data.token) {
-      dispatch(logIn(data));
+      auth.login(data);
     } else if (!freePages.includes(location.pathname)) {
       navigate(urls.login, {
         state: {

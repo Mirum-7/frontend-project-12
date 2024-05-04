@@ -1,20 +1,19 @@
-import axios from 'axios';
 import { useFormik } from 'formik';
 import { useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { object, ref, string } from 'yup';
-import routes from '../routes';
-import { logIn } from '../store/slices/auth';
 import useAuth from '../hooks/auth';
+import { useSignupMutation } from '../store/slices/auth';
 
 const SignupForm = () => {
   const { t } = useTranslation();
   const auth = useAuth();
 
-  const dispatch = useDispatch();
+  const [
+    signup,
+  ] = useSignupMutation();
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -45,10 +44,9 @@ const SignupForm = () => {
     onSubmit: async (values) => {
       setIsLoading(true);
       try {
-        const response = await axios.post(routes.signup, values);
+        const data = await signup(values).unwrap();
 
-        dispatch(logIn(response.data));
-        auth.login(response.data);
+        auth.login(data);
 
         const { from } = location.state;
         navigate(from);
@@ -58,8 +56,9 @@ const SignupForm = () => {
         } else {
           setSignupError(t('errors.network'));
         }
+      } finally {
+        setIsLoading(false);
       }
-      setIsLoading(false);
     },
   });
 

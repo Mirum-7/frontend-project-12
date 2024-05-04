@@ -6,14 +6,16 @@ import {
   InputGroup,
 } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { object, string } from 'yup';
-import { getUsername } from '../store/slices/auth';
 import { useGetChannelsQuery } from '../store/slices/channels';
 import { useAddMessageMutation, useGetMessagesQuery } from '../store/slices/messages';
 import { getSelectedId } from '../store/slices/selected';
 import filter from '../wordFilter';
+import useAuth from '../hooks/auth';
+import baseApi from '../store/slices/baseApi';
+import socket from '../socket';
 
 const Message = ({ username, children }) => (
   <div className="text-break mb-2">
@@ -28,18 +30,36 @@ const Message = ({ username, children }) => (
 const MessageBox = () => {
   const ref = useRef();
 
+  const dispatch = useDispatch();
+
   const selectedChannelId = useSelector(getSelectedId);
-  const { data, isLoading, isError } = useGetMessagesQuery();
+  const { data } = useGetMessagesQuery();
 
   useEffect(() => {
     ref.current.scrollTo(0, ref.current.scrollHeight);
   }, [data]);
 
-  const messages = (!isLoading && !isError) ? data
-    .filter((message) => message.channelId === selectedChannelId)
+  useEffect(() => {
+    const onNewMessage = (newMessage) => {
+      dispatch(
+        baseApi.util.updateQueryData('getMessages', undefined, (draft) => {
+          draft.push(newMessage);
+        }),
+      );
+    };
+
+    socket.on('newMessage', onNewMessage);
+
+    return () => {
+      socket.off('newMessage');
+    };
+  }, []);
+
+  const messages = data
+    ?.filter((message) => message.channelId === selectedChannelId)
     .map((message) => (
       <Message key={message.id} username={message.username}>{message.body}</Message>
-    )) : [];
+    ));
 
   return (
     <div className="overflow-auto px-5" ref={ref}>
@@ -51,8 +71,11 @@ const MessageBox = () => {
 const MessageField = () => {
   const { t } = useTranslation();
 
+  const auth = useAuth();
+
+  const username = auth.getDataFromStorage()?.username;
+
   const selectedChannelId = useSelector(getSelectedId);
-  const username = useSelector(getUsername);
   const [
     addMessage,
     { isLoading },
@@ -75,7 +98,8 @@ const MessageField = () => {
         channelId: selectedChannelId,
         username,
       }).unwrap()
-        .then(() => {
+        .then((response) => {
+          console.log(response);
           formik.resetForm();
           ref.current.focus();
         })
@@ -117,24 +141,13 @@ const Chat = () => {
   const selectedId = useSelector(getSelectedId);
   const {
     data: messages,
-    isLoading: isLoadingMessages,
-    isError: isErrorMessages,
   } = useGetMessagesQuery();
   const {
     data: channels,
-    isLoading: isLoadingChannels,
-    isError: isErrorChannels,
   } = useGetChannelsQuery();
 
-  const success = (!isLoadingMessages
-    && !isLoadingChannels
-    && !isErrorMessages
-    && !isErrorChannels
-  );
-
-  const channelName = success ? channels.find((channel) => channel.id === selectedId).name : null;
-  const messageCount = success
-    ? messages.filter((message) => message.channelId === selectedId).length : null;
+  const channelName = channels?.find((channel) => channel.id === selectedId).name;
+  const messageCount = messages?.filter((message) => message.channelId === selectedId).length;
 
   return (
     <div className="d-flex flex-column h-100 w-100">

@@ -1,5 +1,11 @@
 import { Provider, ErrorBoundary } from '@rollbar/react';
-import rollbarConfig from '../rollbar';
+
+const rollbarConfig = {
+  // Не знаю как использовать env переменную, не читается
+  // Пробовал закинуть в .env файл не получилось
+  accessToken: '021c00ed61e54902810d4717dc90b0e4',
+  environment: 'production',
+};
 
 const RollbarProvider = ({ children }) => (
   <Provider config={rollbarConfig}>

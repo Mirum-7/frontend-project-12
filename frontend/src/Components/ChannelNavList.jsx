@@ -15,6 +15,8 @@ import {
   select,
 } from '../store/slices/selected';
 import filter from '../wordFilter';
+import socket from '../socket';
+import baseApi from '../store/slices/baseApi';
 
 const ChannelButton = ({ variant, title, handler }) => (
   <Button variant={variant} onClick={handler} className="w-100 text-start text-truncate">
@@ -84,27 +86,62 @@ const ChannelNavList = () => {
 
   const {
     data,
-    isLoading,
-    isError,
   } = useGetChannelsQuery();
 
-  const success = (!isLoading && !isError);
-
-  const selectedChannel = success ? data.find((channel) => channel.id === selectedId) : null;
+  const selectedChannel = data?.find((channel) => channel.id === selectedId);
   useEffect(() => {
     if (!selectedChannel) {
       dispatch(select({ id: defaultSelectedId }));
     }
   }, [data]);
 
-  const items = success ? data.map((channel) => (
+  useEffect(() => {
+    const onAddChannel = (channel) => {
+      dispatch(
+        baseApi.util.updateQueryData('getChannels', undefined, (draft) => {
+          draft.push(channel);
+        }),
+      );
+    };
+
+    const onRemoveChannel = (target) => {
+      dispatch(
+        baseApi.util.updateQueryData('getChannels', undefined, (draft) => {
+          const pos = draft.map((channel) => channel.id).indexOf(target.id);
+          draft.splice(pos, 1);
+        }),
+      );
+    };
+
+    const onEditChannel = (target) => {
+      dispatch(
+        baseApi.util.updateQueryData('getChannels', undefined, (draft) => {
+          const pos = draft.map((channel) => channel.id).indexOf(target.id);
+          draft[pos] = target;
+          console.log(draft);
+        }),
+      );
+    };
+
+    socket.on('newChannel', onAddChannel);
+    socket.on('removeChannel', onRemoveChannel);
+    socket.on('renameChannel', onEditChannel);
+
+    return () => {
+      socket.off('newChannel');
+      socket.off('removeChannel');
+      socket.off('renameChannel');
+    };
+  }, []);
+
+  const items = data?.map((channel) => (
     <ChannelNavItem
       key={channel.id}
       id={channel.id}
       title={channel.name}
       removable={channel.removable}
     />
-  )) : null;
+  ));
 
   return (
     <Nav className="flex-column align-items-stretch px-3 gap-1">

@@ -1,32 +1,28 @@
-import { createSlice } from '@reduxjs/toolkit';
+import routes from '../../routes';
+import baseApi from './baseApi';
 
-const initialState = {
-  token: null,
-  username: null,
-  loggedIn: false,
-};
-
-const authSlice = createSlice({
-  name: 'auth',
-  initialState,
-  reducers: {
-    logIn: (state, { payload }) => {
-      state.token = payload.token;
-      state.username = payload.username;
-      state.loggedIn = true;
-    },
-    logOut: (state) => {
-      state.token = null;
-      state.username = null;
-      state.loggedIn = false;
-    },
-  },
+const authApi = baseApi.injectEndpoints({
+  endpoints: (builder) => ({
+    login: builder.mutation({
+      query: (data) => ({
+        url: routes.login,
+        method: 'post',
+        data,
+      }),
+    }),
+    signup: builder.mutation({
+      query: (data) => ({
+        url: routes.signup,
+        method: 'post',
+        data,
+      }),
+    }),
+  }),
 });
 
-export const getLoggedIn = (state) => state.auth.loggedIn;
-export const getUsername = (state) => state.auth.username;
-export const getToken = (state) => state.auth.loggedIn;
+export const {
+  useLoginMutation,
+  useSignupMutation,
+} = authApi;
 
-export const { logIn, logOut } = authSlice.actions;
-
-export default authSlice.reducer;
+export default authApi;

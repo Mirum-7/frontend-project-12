@@ -1,13 +1,10 @@
-import axios from 'axios';
 import { useFormik } from 'formik';
 import { useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
-import routes from '../routes';
-import { logIn } from '../store/slices/auth';
 import useAuth from '../hooks/auth';
+import { useLoginMutation } from '../store/slices/auth';
 
 const LoginForm = () => {
   const { t } = useTranslation();
@@ -17,7 +14,9 @@ const LoginForm = () => {
   const [errorMessage, setErrorMessage] = useState();
   const [isLoading, setIsLoading] = useState(false);
 
-  const dispatch = useDispatch();
+  const [
+    login,
+  ] = useLoginMutation();
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -30,10 +29,9 @@ const LoginForm = () => {
     onSubmit: async (values) => {
       setIsLoading(true);
       try {
-        const response = await axios.post(routes.login, values);
+        const data = await login(values).unwrap();
 
-        dispatch(logIn(response.data));
-        auth.login(response.data);
+        auth.login(data);
 
         const { from } = location.state;
         navigate(from);
@@ -44,8 +42,9 @@ const LoginForm = () => {
           setErrorMessage(t('errors.network'));
         }
         setAuthFailed(true);
+      } finally {
+        setIsLoading(false);
       }
-      setIsLoading(false);
     },
   });
 

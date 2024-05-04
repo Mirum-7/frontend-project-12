@@ -4,39 +4,33 @@ import {
   Row,
 } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import LoginForm from '../components/LoginForm';
 import ToMainButton from '../components/buttons/toMain';
-import { getLoggedIn } from '../store/slices/auth';
 import urls from '../urls';
+import LoggedIn from '../components/LoggedIn';
 
 const Login = () => {
   const { t } = useTranslation();
-
-  const loggedIn = useSelector(getLoggedIn);
 
   return (
     <Row className="justify-content-center align-content-center h-100">
       <Col sm="6" xs="9" md="5" lg="4">
         <Card className="shadow-sm">
-          {loggedIn ? (
-            <>
-              <Card.Title className="text-center p-3 m-0">{t('info.loggedIn')}</Card.Title>
-              <Card.Body className="pt-0 justify-content-end d-flex">
-                <ToMainButton />
-              </Card.Body>
-            </>
-          ) : (
-            <>
-              <Card.Body>
-                <LoginForm />
-              </Card.Body>
-              <Card.Footer className="text-center">
-                <Link to={urls.signup}>{t('links.signup')}</Link>
-              </Card.Footer>
-            </>
-          )}
+          <LoggedIn show>
+            <Card.Title className="text-center p-3 m-0">{t('info.loggedIn')}</Card.Title>
+            <Card.Body className="pt-0 justify-content-end d-flex">
+              <ToMainButton />
+            </Card.Body>
+          </LoggedIn>
+          <LoggedIn show={false}>
+            <Card.Body>
+              <LoginForm />
+            </Card.Body>
+            <Card.Footer className="text-center">
+              <Link to={urls.signup}>{t('links.signup')}</Link>
+            </Card.Footer>
+          </LoggedIn>
         </Card>
       </Col>
     </Row>

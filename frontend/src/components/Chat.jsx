@@ -115,6 +115,7 @@ const MessageField = () => {
         <Form.Control
           id="message"
           type="text"
+          aria-label="Новое сообщение"
           placeholder={t('chat.field.placeholders.message')}
           onChange={formik.handleChange}
           value={formik.values.message}

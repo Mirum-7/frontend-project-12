@@ -9,13 +9,13 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { object, string } from 'yup';
+import useAuth from '../hooks/auth';
+import socket from '../socket';
+import baseApi from '../store/slices/baseApi';
 import { useGetChannelsQuery } from '../store/slices/channels';
 import { useAddMessageMutation, useGetMessagesQuery } from '../store/slices/messages';
 import { getSelectedId } from '../store/slices/selected';
 import filter from '../wordFilter';
-import useAuth from '../hooks/auth';
-import baseApi from '../store/slices/baseApi';
-import socket from '../socket';
 
 const Message = ({ username, children }) => (
   <div className="text-break mb-2">

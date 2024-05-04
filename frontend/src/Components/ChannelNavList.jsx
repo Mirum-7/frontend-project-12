@@ -7,6 +7,8 @@ import {
 } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
+import socket from '../socket';
+import baseApi from '../store/slices/baseApi';
 import { useGetChannelsQuery } from '../store/slices/channels';
 import { open } from '../store/slices/modal';
 import {
@@ -15,8 +17,6 @@ import {
   select,
 } from '../store/slices/selected';
 import filter from '../wordFilter';
-import socket from '../socket';
-import baseApi from '../store/slices/baseApi';
 
 const ChannelButton = ({ variant, title, handler }) => (
   <Button variant={variant} onClick={handler} className="w-100 text-start text-truncate">

@@ -38,7 +38,7 @@ const App = () => (
                     <RenderModals />
                     <ToastContainer
                       position="top-right"
-                      autoClose={2500}
+                      autoClose={5000}
                       hideProgressBar={false}
                       newestOnTop
                       closeOnClick

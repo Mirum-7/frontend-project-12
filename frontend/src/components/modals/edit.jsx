@@ -74,8 +74,10 @@ const EditModal = () => {
       <Modal.Body>
         <Form onSubmit={formik.handleSubmit}>
           <Form.Group has-validation="true" className="mb-3">
+            <Form.Label for="name">{t('modals.labels.name')}</Form.Label>
             <Form.Control
               id="name"
+              name="name"
               type="text"
               placeholder={t('modals.placeholders.name')}
               onChange={formik.handleChange}

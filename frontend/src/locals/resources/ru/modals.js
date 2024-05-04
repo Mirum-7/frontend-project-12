@@ -13,6 +13,9 @@ const modals = {
   placeholders: {
     name: 'Имя канала',
   },
+  labels: {
+    name: 'Введите имя канала',
+  },
   add: {
     title: 'Добавить канал',
   },

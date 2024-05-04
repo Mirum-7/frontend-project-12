@@ -82,7 +82,9 @@ const ChannelNavItem = ({
           handler={selectHandler}
           role={cleanedTitle}
         />
-        <Dropdown.Toggle variant={getVariant()} split />
+        <Dropdown.Toggle variant={getVariant()} split>
+          <span className="visually-hidden">Управление каналом</span>
+        </Dropdown.Toggle>
         <Dropdown.Menu>
           <Dropdown.Item onClick={editHandler}>{t('channelNavList.item.menu.edit')}</Dropdown.Item>
           <Dropdown.Item onClick={removeHandler}>{t('channelNavList.item.menu.remove')}</Dropdown.Item>

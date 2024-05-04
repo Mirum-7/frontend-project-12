@@ -50,7 +50,8 @@ const SignupForm = () => {
 
         navigate(urls.main);
       } catch (err) {
-        if (err.isAxiosError && err.response?.status === 409) {
+        console.log(err);
+        if (err?.status === 409) {
           setSignupError(t('signup.errors.userExist'));
         } else {
           setSignupError(t('errors.network'));

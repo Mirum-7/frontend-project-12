@@ -4,17 +4,17 @@ import baseApi from './baseApi';
 const authApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     login: builder.mutation({
-      query: (data) => ({
+      query: (body) => ({
         url: routes.login,
         method: 'post',
-        data,
+        body,
       }),
     }),
     signup: builder.mutation({
-      query: (data) => ({
+      query: (body) => ({
         url: routes.signup,
-        method: 'post',
-        data,
+        method: 'POST',
+        body,
       }),
     }),
   }),

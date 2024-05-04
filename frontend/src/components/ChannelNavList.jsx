@@ -18,8 +18,18 @@ import {
 } from '../store/slices/selected';
 import filter from '../wordFilter';
 
-const ChannelButton = ({ variant, title, handler }) => (
-  <Button variant={variant} onClick={handler} className="w-100 text-start text-truncate">
+const ChannelButton = ({
+  variant,
+  title,
+  handler,
+  role,
+}) => (
+  <Button
+    variant={variant}
+    onClick={handler}
+    className="w-100 text-start text-truncate"
+    role={role}
+  >
     {`# ${title}`}
   </Button>
 );
@@ -56,12 +66,22 @@ const ChannelNavItem = ({
 
   if (!removable) {
     button = (
-      <ChannelButton title={cleanedTitle} variant={getVariant()} handler={selectHandler} />
+      <ChannelButton
+        title={cleanedTitle}
+        variant={getVariant()}
+        handler={selectHandler}
+        role={title}
+      />
     );
   } else {
     button = (
       <Dropdown as={ButtonGroup} className="w-100">
-        <ChannelButton title={cleanedTitle} variant={getVariant()} handler={selectHandler} />
+        <ChannelButton
+          title={cleanedTitle}
+          variant={getVariant()}
+          handler={selectHandler}
+          role={title}
+        />
         <Dropdown.Toggle variant={getVariant()} split />
         <Dropdown.Menu>
           <Dropdown.Item onClick={editHandler}>{t('channelNavList.item.menu.edit')}</Dropdown.Item>

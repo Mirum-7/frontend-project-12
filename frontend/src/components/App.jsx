@@ -37,16 +37,7 @@ const App = () => (
                     <Main />
                     <RenderModals />
                     <ToastContainer
-                      position="top-right"
                       autoClose={5000}
-                      hideProgressBar={false}
-                      newestOnTop
-                      closeOnClick
-                      rtl={false}
-                      pauseOnFocusLoss
-                      draggable={false}
-                      pauseOnHover={false}
-                      theme="light"
                     />
                   </PrivateRoute>
                 )}

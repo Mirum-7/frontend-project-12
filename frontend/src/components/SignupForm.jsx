@@ -66,6 +66,7 @@ const SignupForm = () => {
     <Form onSubmit={formik.handleSubmit}>
       <fieldset>
         <Form.Group className="mb-3">
+          <Form.Label for="username">{t('signup.labels.username')}</Form.Label>
           <Form.Control
             onChange={(e) => {
               setSignupError(null);
@@ -85,6 +86,7 @@ const SignupForm = () => {
           </Form.Control.Feedback>
         </Form.Group>
         <Form.Group className="mb-3">
+          <Form.Label for="password">{t('signup.labels.password')}</Form.Label>
           <Form.Control
             onChange={formik.handleChange}
             value={formik.values.password}
@@ -101,6 +103,7 @@ const SignupForm = () => {
           </Form.Control.Feedback>
         </Form.Group>
         <Form.Group className="mb-3">
+          <Form.Label for="passwordConfirm">{t('signup.labels.passwordConfirm')}</Form.Label>
           <Form.Control
             onChange={formik.handleChange}
             value={formik.values.passwordConfirm}

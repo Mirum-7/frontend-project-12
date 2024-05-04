@@ -8,8 +8,8 @@ const login = {
     password: 'Пароль',
   },
   placeholders: {
-    username: 'Ваш ник',
-    password: 'Пароль',
+    username: 'Введите ник',
+    password: 'Введите пароль',
   },
 };
 

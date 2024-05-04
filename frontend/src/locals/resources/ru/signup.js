@@ -21,8 +21,8 @@ const signup = {
     passwordConfirm: 'Подтвердите пароль',
   },
   placeholders: {
-    username: 'Имя пользователя',
-    password: 'Пароль',
+    username: 'Введите ник',
+    password: 'Введите пароль',
     passwordConfirm: 'Подтвердите пароль',
   },
 };

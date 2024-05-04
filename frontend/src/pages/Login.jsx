@@ -6,9 +6,10 @@ import {
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import LoginForm from '../Components/LoginForm';
-import ToMainButton from '../Components/buttons/ToMain';
+import LoginForm from '../components/LoginForm';
+import ToMainButton from '../components/buttons/toMain';
 import { getLoggedIn } from '../store/slices/auth';
+import urls from '../urls';
 
 const Login = () => {
   const { t } = useTranslation();
@@ -32,7 +33,7 @@ const Login = () => {
                 <LoginForm />
               </Card.Body>
               <Card.Footer className="text-center">
-                <Link to="/signup">{t('links.signup')}</Link>
+                <Link to={urls.signup}>{t('links.signup')}</Link>
               </Card.Footer>
             </>
           )}

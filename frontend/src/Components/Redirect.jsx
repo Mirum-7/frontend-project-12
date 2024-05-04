@@ -1,17 +1,21 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { logIn, getLoggedIn } from '../store/slices/auth';
+import { getLoggedIn, logIn } from '../store/slices/auth';
+import urls from '../urls';
+import useAuth from '../hooks/auth';
 
 const freePages = [
-  '/login',
-  '/signup',
+  urls.login,
+  urls.signup,
 ];
 
 const Redirect = ({ children }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
+
+  const auth = useAuth();
 
   const loggedIn = useSelector(getLoggedIn);
 
@@ -20,12 +24,12 @@ const Redirect = ({ children }) => {
       return;
     }
 
-    const data = JSON.parse(localStorage.getItem('userId'));
+    const data = auth.getTokenFromStorage();
 
     if (data && data.token) {
       dispatch(logIn(data));
     } else if (!freePages.includes(location.pathname)) {
-      navigate('/login', {
+      navigate(urls.login, {
         state: {
           from: location,
         },

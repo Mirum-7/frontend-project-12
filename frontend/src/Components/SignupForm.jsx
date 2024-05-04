@@ -8,9 +8,11 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { object, ref, string } from 'yup';
 import routes from '../routes';
 import { logIn } from '../store/slices/auth';
+import useAuth from '../hooks/auth';
 
 const SignupForm = () => {
   const { t } = useTranslation();
+  const auth = useAuth();
 
   const dispatch = useDispatch();
 
@@ -45,9 +47,8 @@ const SignupForm = () => {
       try {
         const response = await axios.post(routes.signup, values);
 
-        localStorage.setItem('userId', JSON.stringify(response.data));
-
         dispatch(logIn(response.data));
+        auth.login(response.data);
 
         const { from } = location.state;
         navigate(from);

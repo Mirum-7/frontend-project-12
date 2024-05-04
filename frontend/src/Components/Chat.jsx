@@ -35,14 +35,11 @@ const MessageBox = () => {
     ref.current.scrollTo(0, ref.current.scrollHeight);
   }, [data]);
 
-  let messages = [];
-  if (!isLoading && !isError) {
-    messages = data
-      .filter((message) => message.channelId === selectedChannelId)
-      .map((message) => (
-        <Message key={message.id} username={message.username}>{message.body}</Message>
-      ));
-  }
+  const messages = (!isLoading && !isError) ? data
+    .filter((message) => message.channelId === selectedChannelId)
+    .map((message) => (
+      <Message key={message.id} username={message.username}>{message.body}</Message>
+    )) : [];
 
   return (
     <div className="overflow-auto px-5" ref={ref}>
@@ -61,12 +58,14 @@ const MessageField = () => {
     { isLoading },
   ] = useAddMessageMutation();
 
-  const shcema = object().shape({
+  const ref = useRef();
+
+  const shceme = object().shape({
     message: string().required(),
   });
 
   const formik = useFormik({
-    validationSchema: shcema,
+    validationSchema: shceme,
     initialValues: {
       message: '',
     },
@@ -78,6 +77,7 @@ const MessageField = () => {
       }).unwrap()
         .then(() => {
           formik.resetForm();
+          ref.current.focus();
         })
         .catch(() => {
           toast.error(t('toast.errors.sendMessage'));
@@ -95,6 +95,7 @@ const MessageField = () => {
           onChange={formik.handleChange}
           value={formik.values.message}
           isInvalid={formik.errors.message}
+          ref={ref}
           autoFocus
         />
         <Button
@@ -125,16 +126,15 @@ const Chat = () => {
     isError: isErrorChannels,
   } = useGetChannelsQuery();
 
-  let messageCount = 0;
-  let channelName = '';
-  if (!isLoadingMessages
+  const success = (!isLoadingMessages
     && !isLoadingChannels
     && !isErrorMessages
     && !isErrorChannels
-  ) {
-    channelName = channels.find((channel) => channel.id === selectedId).name;
-    messageCount = messages.filter((message) => message.channelId === selectedId).length;
-  }
+  );
+
+  const channelName = success ? channels.find((channel) => channel.id === selectedId).name : null;
+  const messageCount = success
+    ? messages.filter((message) => message.channelId === selectedId).length : null;
 
   return (
     <div className="d-flex flex-column h-100 w-100">

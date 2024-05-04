@@ -7,9 +7,11 @@ import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import routes from '../routes';
 import { logIn } from '../store/slices/auth';
+import useAuth from '../hooks/auth';
 
 const LoginForm = () => {
   const { t } = useTranslation();
+  const auth = useAuth();
 
   const [authFailed, setAuthFailed] = useState(false);
   const [errorMessage, setErrorMessage] = useState();
@@ -30,9 +32,8 @@ const LoginForm = () => {
       try {
         const response = await axios.post(routes.login, values);
 
-        localStorage.setItem('userId', JSON.stringify(response.data));
-
         dispatch(logIn(response.data));
+        auth.login(response.data);
 
         const { from } = location.state;
         navigate(from);

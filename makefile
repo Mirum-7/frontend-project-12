@@ -5,11 +5,11 @@ build:
 start:
 	npm start
 
-start-serve:
+start-server:
 	npm start
 
 start-client:
-	cd frontend; npm start
+	cd frontend && npm start
 
 start-app:
 	make -j 2 start-client start-server
@@ -19,5 +19,4 @@ lint:
 
 install: 
 	npm install
-	cd frontend; npm install
-	npm run build
+	cd frontend && npm install

@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { Button, Modal } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
@@ -15,14 +14,22 @@ const RemoveModal = () => {
 
   const [
     removeChannel,
+    { isError },
   ] = useRemoveChannelMutation();
 
-  const [error, setError] = useState();
   const isOpened = status && type === 'remove';
 
   const closeHandler = () => {
     dispatch(close());
-    setError(null);
+  };
+
+  const removeHandler = () => {
+    removeChannel(id)
+      .unwrap()
+      .then(() => {
+        closeHandler();
+        toast.success(t('toast.success.removeChannel'));
+      });
   };
 
   return (
@@ -31,23 +38,13 @@ const RemoveModal = () => {
         <Modal.Title>{t('modals.remove.title')}</Modal.Title>
       </Modal.Header>
       <Modal.Footer>
-        {error ? <p className="text-danger">{error}</p> : null}
+        {isError ? <p className="text-danger">{t('errors.network')}</p> : null}
         <Button variant="secondary" onClick={closeHandler}>
           Отмена
         </Button>
         <Button
           variant="danger"
-          onClick={() => {
-            removeChannel(id)
-              .unwrap()
-              .then(() => {
-                closeHandler();
-                toast.success(t('toast.success.removeChannel'));
-              })
-              .catch(() => {
-                setError(t('errors.network'));
-              });
-          }}
+          onClick={removeHandler}
         >
           {t('modals.remove.submit')}
         </Button>

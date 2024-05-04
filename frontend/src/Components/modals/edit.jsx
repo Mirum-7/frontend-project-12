@@ -1,4 +1,5 @@
 import { useFormik } from 'formik';
+import { useEffect, useRef } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
@@ -16,16 +17,21 @@ const EditModal = () => {
 
   const isOpened = status && type === 'edit';
 
+  const ref = useRef();
+
+  useEffect(() => {
+    if (ref.current) {
+      ref.current.focus();
+    }
+  }, [isOpened]);
+
   const [
     editChannel,
     { isLoading: isLoadingAdd },
   ] = useEditChannelMutation();
   const { data, isLoading: isLoadingGet, isError: isErrorGet } = useGetChannelsQuery();
 
-  let names = [];
-  if (!isLoadingGet && !isErrorGet) {
-    names = data.map((channel) => channel.name);
-  }
+  const names = (!isLoadingGet && !isErrorGet) ? data.map((channel) => channel.name) : [];
 
   const closeHandler = (formik) => {
     dispatch(close());
@@ -36,7 +42,7 @@ const EditModal = () => {
     name: '',
   };
 
-  const shcema = object().shape({
+  const shceme = object().shape({
     name: string()
       .required(t('modals.validation.required'))
       .min(3, t('modals.validation.min'))
@@ -46,7 +52,7 @@ const EditModal = () => {
 
   const formik = useFormik({
     initialValues,
-    validationSchema: shcema,
+    validationSchema: shceme,
     onSubmit: (values) => {
       editChannel({ id, channel: values })
         .unwrap()
@@ -67,7 +73,7 @@ const EditModal = () => {
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={formik.handleSubmit}>
-          <Form.Group has-validation="true">
+          <Form.Group has-validation="true" className="mb-3">
             <Form.Control
               id="name"
               type="text"
@@ -75,26 +81,27 @@ const EditModal = () => {
               onChange={formik.handleChange}
               value={formik.values.name}
               isInvalid={!!formik.errors.name}
+              ref={ref}
               autoFocus
             />
             <Form.Control.Feedback type="invalid">
               {formik.errors.name}
             </Form.Control.Feedback>
           </Form.Group>
+          <Form.Group className="justify-content-end d-flex gap-3">
+            <Button variant="secondary" onClick={() => closeHandler(formik)}>
+              {t('modals.buttons.close')}
+            </Button>
+            <Button
+              variant="primary"
+              disabled={isLoadingAdd || isLoadingGet}
+              type="submit"
+            >
+              { isLoadingAdd ? t('modals.buttons.loading') : t('modals.buttons.submit')}
+            </Button>
+          </Form.Group>
         </Form>
       </Modal.Body>
-      <Modal.Footer>
-        <Button variant="secondary" onClick={() => closeHandler(formik)}>
-          {t('modals.buttons.close')}
-        </Button>
-        <Button
-          variant="primary"
-          disabled={isLoadingAdd || isLoadingGet}
-          onClick={formik.handleSubmit}
-        >
-          { isLoadingAdd ? t('modals.buttons.loading') : t('modals.buttons.submit')}
-        </Button>
-      </Modal.Footer>
     </Modal>
   );
 };

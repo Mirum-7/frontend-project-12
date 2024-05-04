@@ -1,9 +1,9 @@
+import { useEffect } from 'react';
 import {
   Button,
   ButtonGroup,
   Dropdown,
   Nav,
-  Placeholder,
 } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
@@ -16,6 +16,12 @@ import {
 } from '../store/slices/selected';
 import filter from '../wordFilter';
 
+const ChannelButton = ({ variant, title, handler }) => (
+  <Button variant={variant} onClick={handler} className="w-100 text-start text-truncate">
+    {`# ${title}`}
+  </Button>
+);
+
 const ChannelNavItem = ({
   title,
   id,
@@ -23,7 +29,7 @@ const ChannelNavItem = ({
 }) => {
   const { t } = useTranslation();
 
-  title = filter.clean(title);
+  const cleanedTitle = filter.clean(title);
 
   const dispatch = useDispatch();
 
@@ -48,16 +54,12 @@ const ChannelNavItem = ({
 
   if (!removable) {
     button = (
-      <Button variant={getVariant()} onClick={selectHandler} className="w-100 text-start text-truncate">
-        {`# ${title}`}
-      </Button>
+      <ChannelButton title={cleanedTitle} variant={getVariant()} handler={selectHandler} />
     );
   } else {
     button = (
       <Dropdown as={ButtonGroup} className="w-100">
-        <Button variant={getVariant()} onClick={selectHandler} className="w-100 text-truncate text-start">
-          {`# ${title}`}
-        </Button>
+        <ChannelButton title={cleanedTitle} variant={getVariant()} handler={selectHandler} />
         <Dropdown.Toggle variant={getVariant()} split />
         <Dropdown.Menu>
           <Dropdown.Item onClick={editHandler}>{t('channelNavList.item.menu.edit')}</Dropdown.Item>
@@ -86,32 +88,23 @@ const ChannelNavList = () => {
     isError,
   } = useGetChannelsQuery();
 
-  if (isError) {
-    return null;
-  }
+  const success = (!isLoading && !isError);
 
-  if (isLoading) {
-    return (
-      <Nav className="flex-column align-items-stretch px-3 gap-1 d-block">
-        <Placeholder.Button variant="secondary" className="w-100" />
-      </Nav>
-    );
-  }
+  const selectedChannel = success ? data.find((channel) => channel.id === selectedId) : null;
+  useEffect(() => {
+    if (!selectedChannel) {
+      dispatch(select({ id: defaultSelectedId }));
+    }
+  }, [data]);
 
-  const selectedChannel = data.find((channel) => channel.id === selectedId);
-
-  if (!selectedChannel) {
-    dispatch(select({ id: defaultSelectedId }));
-  }
-
-  const items = data.map((channel) => (
+  const items = success ? data.map((channel) => (
     <ChannelNavItem
       key={channel.id}
       id={channel.id}
       title={channel.name}
       removable={channel.removable}
     />
-  ));
+  )) : null;
 
   return (
     <Nav className="flex-column align-items-stretch px-3 gap-1">

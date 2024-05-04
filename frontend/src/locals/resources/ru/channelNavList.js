@@ -1,7 +1,7 @@
 const channelNavList = {
   item: {
     menu: {
-      edit: 'Редактировать',
+      edit: 'Переименовать',
       remove: 'Удалить',
     },
   },

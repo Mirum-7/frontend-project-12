@@ -2,9 +2,10 @@ import { useFormik } from 'formik';
 import { useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import useAuth from '../hooks/auth';
 import { useLoginMutation } from '../store/slices/auth';
+import urls from '../urls';
 
 const LoginForm = () => {
   const { t } = useTranslation();
@@ -19,7 +20,6 @@ const LoginForm = () => {
   ] = useLoginMutation();
 
   const navigate = useNavigate();
-  const location = useLocation();
 
   const formik = useFormik({
     initialValues: {
@@ -33,8 +33,7 @@ const LoginForm = () => {
 
         auth.login(data);
 
-        const { from } = location.state;
-        navigate(from);
+        navigate(urls.main);
       } catch (err) {
         if (err.isAxiosError && err.response?.status === 401) {
           setErrorMessage(t('login.errors.incorrectData'));

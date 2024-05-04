@@ -2,10 +2,11 @@ import { useFormik } from 'formik';
 import { useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { object, ref, string } from 'yup';
 import useAuth from '../hooks/auth';
 import { useSignupMutation } from '../store/slices/auth';
+import urls from '../urls';
 
 const SignupForm = () => {
   const { t } = useTranslation();
@@ -16,7 +17,6 @@ const SignupForm = () => {
   ] = useSignupMutation();
 
   const navigate = useNavigate();
-  const location = useLocation();
 
   const [signUpError, setSignupError] = useState();
   const [isLoading, setIsLoading] = useState(false);
@@ -48,8 +48,7 @@ const SignupForm = () => {
 
         auth.login(data);
 
-        const { from } = location.state;
-        navigate(from);
+        navigate(urls.main);
       } catch (err) {
         if (err.isAxiosError && err.response?.status === 409) {
           setSignupError(t('signup.errors.userExist'));

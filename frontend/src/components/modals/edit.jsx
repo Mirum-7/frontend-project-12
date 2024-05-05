@@ -19,10 +19,14 @@ const EditModal = () => {
 
   const ref = useRef();
 
-  useEffect(() => {
+  const focus = () => {
     if (ref.current) {
-      ref.current.focus();
+      ref.current.select();
     }
+  };
+
+  useEffect(() => {
+    focus();
   }, [isOpened]);
 
   const [
@@ -42,7 +46,7 @@ const EditModal = () => {
     name: '',
   };
 
-  const shceme = object().shape({
+  const schema = object().shape({
     name: string()
       .required(t('modals.validation.required'))
       .min(3, t('modals.validation.range'))
@@ -52,7 +56,7 @@ const EditModal = () => {
 
   const formik = useFormik({
     initialValues,
-    validationSchema: shceme,
+    validationSchema: schema,
     onSubmit: (values) => {
       editChannel({ id, channel: values })
         .unwrap()
@@ -60,8 +64,9 @@ const EditModal = () => {
           toast.success(t('toast.success.editChannel'));
           closeHandler(formik);
         })
-        .catch(() => {
-          formik.errors.name = t('errors.network');
+        .catch((e) => {
+          formik.errors.name = e.error;
+          focus();
         });
     },
   });

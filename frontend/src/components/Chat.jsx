@@ -83,12 +83,12 @@ const MessageField = () => {
 
   const ref = useRef();
 
-  const shceme = object().shape({
+  const schema = object().shape({
     message: string().required(),
   });
 
   const formik = useFormik({
-    validationSchema: shceme,
+    validationSchema: schema,
     initialValues: {
       message: '',
     },

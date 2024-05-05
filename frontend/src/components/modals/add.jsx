@@ -23,10 +23,14 @@ const AddModal = () => {
   const isOpened = status && type === 'add';
   const ref = useRef();
 
-  useEffect(() => {
+  const focus = () => {
     if (ref.current) {
-      ref.current.focus();
+      ref.current.select();
     }
+  };
+
+  useEffect(() => {
+    focus();
   }, [isOpened]);
 
   const [
@@ -65,8 +69,9 @@ const AddModal = () => {
           dispatch(select(response));
           closeHandler(formik);
         })
-        .catch(() => {
-          formik.errors.name = t('errors.network');
+        .catch((e) => {
+          formik.errors.name = e.error;
+          focus();
         });
     },
   });
@@ -89,7 +94,6 @@ const AddModal = () => {
               value={formik.values.name}
               isInvalid={!!formik.errors.name}
               ref={ref}
-              autoFocus
             />
             <Form.Control.Feedback type="invalid">
               {formik.errors.name}

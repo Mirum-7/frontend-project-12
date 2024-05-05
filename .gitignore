@@ -6,6 +6,7 @@ node_modules
 .pnp.js
 
 frontend/.eslintrc.yml
+frontend/.env
 
 # testing
 /coverage

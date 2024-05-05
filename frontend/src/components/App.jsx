@@ -19,6 +19,7 @@ import '../styles/index.scss';
 import urls from '../urls.js';
 import CustomNavbar from './CustomNavBar.jsx';
 import PrivateRoute from './PrivateRoute.jsx';
+import UnLoggedInRoute from './UnLoggedInRoute.jsx';
 import RenderModals from './modals/index.jsx';
 
 const App = () => (
@@ -51,8 +52,22 @@ const App = () => (
                   </PrivateRoute>
                 )}
               />
-              <Route path={urls.login} element={<Login />} />
-              <Route path={urls.signup} element={<Signup />} />
+              <Route
+                path={urls.login}
+                element={(
+                  <UnLoggedInRoute>
+                    <Login />
+                  </UnLoggedInRoute>
+                )}
+              />
+              <Route
+                path={urls.signup}
+                element={(
+                  <UnLoggedInRoute>
+                    <Signup />
+                  </UnLoggedInRoute>
+                )}
+              />
             </Routes>
           </div>
         </Router>

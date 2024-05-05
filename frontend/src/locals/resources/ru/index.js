@@ -3,7 +3,6 @@ import buttons from './buttons';
 import channelNavList from './channelNavList';
 import chat from './chat';
 import errors from './errors';
-import info from './info';
 import links from './links';
 import login from './login';
 import modals from './modals';
@@ -21,7 +20,6 @@ const translation = {
   modals,
   navbar,
   links,
-  info,
   aside,
   toast,
 };

@@ -49,7 +49,7 @@ const ChannelNavItem = ({
   const selected = useSelector(getSelectedId);
 
   const isCurrentSelected = selected === id;
-  const getVariant = () => (isCurrentSelected ? 'secondary' : null);
+  const variant = isCurrentSelected ? 'secondary' : null;
 
   const selectHandler = () => {
     dispatch(select({ id }));
@@ -63,41 +63,32 @@ const ChannelNavItem = ({
     dispatch(open(`edit-${id}`));
   };
 
-  let button;
-
   if (!removable) {
-    button = (
+    return (
       <ChannelButton
         title={cleanedTitle}
-        variant={getVariant()}
+        variant={variant}
         handler={selectHandler}
         role={title}
       />
     );
-  } else {
-    button = (
-      <Dropdown as={ButtonGroup} className="w-100">
-        <ChannelButton
-          title={cleanedTitle}
-          variant={getVariant()}
-          handler={selectHandler}
-          role={cleanedTitle}
-        />
-        <Dropdown.Toggle variant={getVariant()} split>
-          <span className="visually-hidden">Управление каналом</span>
-        </Dropdown.Toggle>
-        <Dropdown.Menu>
-          <Dropdown.Item onClick={editHandler}>{t('channelNavList.item.menu.edit')}</Dropdown.Item>
-          <Dropdown.Item onClick={removeHandler}>{t('channelNavList.item.menu.remove')}</Dropdown.Item>
-        </Dropdown.Menu>
-      </Dropdown>
-    );
   }
-
   return (
-    <Nav.Item className="w-100">
-      {button}
-    </Nav.Item>
+    <Dropdown as={ButtonGroup} className="w-100">
+      <ChannelButton
+        title={cleanedTitle}
+        variant={variant}
+        handler={selectHandler}
+        role={cleanedTitle}
+      />
+      <Dropdown.Toggle variant={variant} split>
+        <span className="visually-hidden">Управление каналом</span>
+      </Dropdown.Toggle>
+      <Dropdown.Menu>
+        <Dropdown.Item onClick={editHandler}>{t('channelNavList.item.menu.edit')}</Dropdown.Item>
+        <Dropdown.Item onClick={removeHandler}>{t('channelNavList.item.menu.remove')}</Dropdown.Item>
+      </Dropdown.Menu>
+    </Dropdown>
   );
 };
 
@@ -157,18 +148,19 @@ const ChannelNavList = () => {
     };
   }, []);
 
-  const items = data?.map((channel) => (
-    <ChannelNavItem
-      key={channel.id}
-      id={channel.id}
-      title={channel.name}
-      removable={channel.removable}
-    />
-  ));
-
   return (
     <Nav className="flex-column align-items-stretch px-3 gap-1">
-      {items}
+      {
+        data?.map((channel) => (
+          <Nav.Item className="w-100" key={channel.id}>
+            <ChannelNavItem
+              id={channel.id}
+              title={channel.name}
+              removable={channel.removable}
+            />
+          </Nav.Item>
+        ))
+      }
     </Nav>
   );
 };

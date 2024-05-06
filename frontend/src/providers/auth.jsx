@@ -1,8 +1,8 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import AuthContext from '../contexts/auth';
 
 const AuthProvider = ({ children }) => {
-  const [loggedIn, setLoggedIn] = useState(true);
+  const [loggedIn, setLoggedIn] = useState(!!localStorage.getItem('userId'));
 
   const logout = () => {
     setLoggedIn(false);
@@ -15,13 +15,6 @@ const AuthProvider = ({ children }) => {
   };
 
   const getDataFromStorage = () => JSON.parse(localStorage.getItem('userId'));
-
-  useEffect(() => {
-    const data = getDataFromStorage();
-    if (!data) {
-      logout();
-    }
-  }, []);
 
   const values = useMemo(() => ({
     login,

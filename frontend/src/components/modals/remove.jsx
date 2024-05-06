@@ -14,7 +14,7 @@ const RemoveModal = () => {
 
   const [
     removeChannel,
-    { isError },
+    { error },
   ] = useRemoveChannelMutation();
 
   const isOpened = status && type === 'remove';
@@ -25,7 +25,6 @@ const RemoveModal = () => {
 
   const removeHandler = () => {
     removeChannel(id)
-      .unwrap()
       .then(() => {
         closeHandler();
         toast.success(t('toast.success.removeChannel'));
@@ -38,7 +37,7 @@ const RemoveModal = () => {
         <Modal.Title>{t('modals.remove.title')}</Modal.Title>
       </Modal.Header>
       <Modal.Footer>
-        {isError ? <p className="text-danger">{t('errors.network')}</p> : null}
+        {error ? <p className="text-danger">error</p> : null}
         <Button variant="secondary" onClick={closeHandler}>
           Отмена
         </Button>

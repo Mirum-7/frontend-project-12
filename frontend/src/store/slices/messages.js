@@ -1,5 +1,5 @@
-import baseApi, { createHeaders, getTokenFromStorage } from './baseApi';
 import routes from '../../routes';
+import baseApi from './baseApi';
 
 const messageApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -7,7 +7,6 @@ const messageApi = baseApi.injectEndpoints({
       query: () => ({
         url: routes.messages,
         method: 'GET',
-        headers: createHeaders(getTokenFromStorage()),
       }),
       providesTags: ['messages'],
     }),
@@ -16,7 +15,6 @@ const messageApi = baseApi.injectEndpoints({
         url: routes.messages,
         method: 'POST',
         body: message,
-        headers: createHeaders(getTokenFromStorage()),
       }),
     }),
   }),

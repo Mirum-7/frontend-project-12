@@ -1,4 +1,4 @@
-import baseApi, { createHeaders, getTokenFromStorage } from './baseApi';
+import baseApi from './baseApi';
 import routes from '../../routes';
 
 const channelApi = baseApi.injectEndpoints({
@@ -7,7 +7,6 @@ const channelApi = baseApi.injectEndpoints({
       query: () => ({
         url: routes.channels,
         method: 'GET',
-        headers: createHeaders(getTokenFromStorage()),
       }),
     }),
     addChannel: builder.mutation({
@@ -15,7 +14,6 @@ const channelApi = baseApi.injectEndpoints({
         url: routes.channels,
         method: 'POST',
         body: channel,
-        headers: createHeaders(getTokenFromStorage()),
       }),
     }),
     editChannel: builder.mutation({
@@ -23,14 +21,12 @@ const channelApi = baseApi.injectEndpoints({
         url: `${routes.channels}/${id}`,
         method: 'PATCH',
         body: channel,
-        headers: createHeaders(getTokenFromStorage()),
       }),
     }),
     removeChannel: builder.mutation({
       query: (id) => ({
         url: `${routes.channels}/${id}`,
         method: 'DELETE',
-        headers: createHeaders(getTokenFromStorage()),
       }),
       invalidatesTags: ['messages'],
     }),

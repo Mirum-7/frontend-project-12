@@ -1,4 +1,5 @@
 /* eslint-disable no-param-reassign */
+import filter from 'leo-profanity';
 import { useEffect } from 'react';
 import {
   Button,
@@ -8,7 +9,6 @@ import {
 } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import socket from '../socket';
 import baseApi from '../store/slices/baseApi';
 import { useGetChannelsQuery } from '../store/slices/channels';
 import { open } from '../store/slices/modal';
@@ -17,7 +17,8 @@ import {
   getSelectedId,
   select,
 } from '../store/slices/selected';
-import filter from '../wordFilter';
+import useSocket from '../hooks/socket';
+import useAuth from '../hooks/auth';
 
 const ChannelButton = ({
   variant,
@@ -98,9 +99,21 @@ const ChannelNavList = () => {
 
   const dispatch = useDispatch();
 
+  const auth = useAuth();
+
   const {
     data,
+    error,
   } = useGetChannelsQuery();
+
+  useEffect(() => {
+    if (
+      error
+      && error.status === 401
+    ) {
+      auth.logout();
+    }
+  }, [error]);
 
   const selectedChannel = data?.find((channel) => channel.id === selectedId);
   useEffect(() => {
@@ -108,6 +121,8 @@ const ChannelNavList = () => {
       dispatch(select({ id: defaultSelectedId }));
     }
   }, [data]);
+
+  const socket = useSocket();
 
   useEffect(() => {
     const onAddChannel = (channel) => {

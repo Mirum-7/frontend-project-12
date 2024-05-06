@@ -1,4 +1,5 @@
 import { useFormik } from 'formik';
+import filter from 'leo-profanity';
 import { useEffect, useRef } from 'react';
 import {
   Button,
@@ -10,12 +11,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { object, string } from 'yup';
 import useAuth from '../hooks/auth';
-import socket from '../socket';
 import baseApi from '../store/slices/baseApi';
 import { useGetChannelsQuery } from '../store/slices/channels';
 import { useAddMessageMutation, useGetMessagesQuery } from '../store/slices/messages';
 import { getSelectedId } from '../store/slices/selected';
-import filter from '../wordFilter';
+import useSocket from '../hooks/socket';
 
 const Message = ({ username, children }) => (
   <div className="text-break mb-2">
@@ -34,6 +34,8 @@ const MessageBox = () => {
 
   const selectedChannelId = useSelector(getSelectedId);
   const { data } = useGetMessagesQuery();
+
+  const socket = useSocket();
 
   useEffect(() => {
     ref.current.scrollTo(0, ref.current.scrollHeight);
@@ -138,13 +140,25 @@ const MessageField = () => {
 const Chat = () => {
   const { t } = useTranslation();
 
+  const auth = useAuth();
+
   const selectedId = useSelector(getSelectedId);
   const {
     data: messages,
+    error: getMessagesError,
   } = useGetMessagesQuery();
   const {
     data: channels,
   } = useGetChannelsQuery();
+
+  useEffect(() => {
+    if (
+      getMessagesError
+      && getMessagesError.status === 401
+    ) {
+      auth.logout();
+    }
+  }, [getMessagesError]);
 
   const channelName = channels?.find((channel) => channel.id === selectedId)?.name;
   const messageCount = messages?.filter((message) => message.channelId === selectedId).length;
@@ -152,8 +166,12 @@ const Chat = () => {
   return (
     <div className="d-flex flex-column h-100 w-100">
       <div className="bg-light mb-4 p-3 shadow-sm small">
-        <p className="m-0"><b>{`# ${channelName}`}</b></p>
-        <span className="text-muted">{t('chat.header.messageCount.key', { count: messageCount })}</span>
+        <p className="m-0"><b>{`# ${channelName ?? null}`}</b></p>
+        <span className="text-muted">
+          {
+            messageCount ? t('chat.header.messageCount.key', { count: messageCount }) : null
+          }
+        </span>
       </div>
       <MessageBox />
       <div className="mt-auto px-5 py-3">

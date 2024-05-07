@@ -22,7 +22,7 @@ import '../styles/index.scss';
 import urls from '../urls.js';
 import CustomNavbar from './CustomNavBar.jsx';
 import PrivateRoute from './PrivateRoute.jsx';
-import UnLoggedInRoute from './UnLoggedInRoute.jsx';
+import PublicRoute from './PublicRoute.jsx';
 import RenderModals from './modals';
 
 const App = ({ init }) => {
@@ -40,6 +40,18 @@ const App = ({ init }) => {
             <I18nextProvider i18n={i18n} defaultNS="translation">
               <Router>
                 <CustomNavbar />
+                <ToastContainer
+                  position="top-right"
+                  autoClose={5000}
+                  hideProgressBar={false}
+                  newestOnTop
+                  closeOnClick
+                  rtl={false}
+                  pauseOnFocusLoss
+                  draggable={false}
+                  pauseOnHover={false}
+                  theme="light"
+                />
                 <div className="d-flex flex-column h-100">
                   <Routes>
                     <Route path="*" element={<Error404 />} />
@@ -49,35 +61,23 @@ const App = ({ init }) => {
                         <PrivateRoute>
                           <Main />
                           <RenderModals />
-                          <ToastContainer
-                            position="top-right"
-                            autoClose={5000}
-                            hideProgressBar={false}
-                            newestOnTop
-                            closeOnClick
-                            rtl={false}
-                            pauseOnFocusLoss
-                            draggable={false}
-                            pauseOnHover={false}
-                            theme="light"
-                          />
                         </PrivateRoute>
                       )}
                     />
                     <Route
                       path={urls.login}
                       element={(
-                        <UnLoggedInRoute>
+                        <PublicRoute>
                           <Login />
-                        </UnLoggedInRoute>
+                        </PublicRoute>
                       )}
                     />
                     <Route
                       path={urls.signup}
                       element={(
-                        <UnLoggedInRoute>
+                        <PublicRoute>
                           <Signup />
-                        </UnLoggedInRoute>
+                        </PublicRoute>
                       )}
                     />
                   </Routes>

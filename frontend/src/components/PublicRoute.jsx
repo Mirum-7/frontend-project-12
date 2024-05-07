@@ -2,7 +2,7 @@ import { Navigate } from 'react-router-dom';
 import useAuth from '../hooks/auth';
 import urls from '../urls';
 
-const UnLoggedInRoute = ({ children }) => {
+const PublicRoute = ({ children }) => {
   const auth = useAuth();
   const { loggedIn } = auth;
 
@@ -11,4 +11,4 @@ const UnLoggedInRoute = ({ children }) => {
   );
 };
 
-export default UnLoggedInRoute;
+export default PublicRoute;

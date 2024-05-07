@@ -25,6 +25,7 @@ const AddModal = () => {
 
   const focus = () => {
     if (ref.current) {
+      ref.current.focus();
       ref.current.select();
     }
   };

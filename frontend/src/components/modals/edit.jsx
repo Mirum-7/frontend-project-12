@@ -2,25 +2,22 @@ import { useFormik } from 'formik';
 import { useEffect, useRef } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import { object, string } from 'yup';
 import { useEditChannelMutation, useGetChannelsQuery } from '../../store/slices/channels';
-import { close, getOpened, getType } from '../../store/slices/modal';
+import { close } from '../../store/slices/modal';
 
-const EditModal = () => {
+const EditModal = ({ id, isOpened }) => {
   const { t } = useTranslation();
 
   const dispatch = useDispatch();
-  const status = useSelector(getOpened);
-  const [type, id] = useSelector(getType).split('-');
-
-  const isOpened = status && type === 'edit';
 
   const ref = useRef();
 
   const focus = () => {
     if (ref.current) {
+      ref.current.focus();
       ref.current.select();
     }
   };

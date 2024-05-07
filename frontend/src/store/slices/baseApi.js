@@ -8,7 +8,10 @@ const baseApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: '/',
     prepareHeaders: (headers) => {
-      headers.set('Authorization', `Bearer ${getTokenFromStorage()}`);
+      const token = getTokenFromStorage();
+      if (token) {
+        headers.set('Authorization', `Bearer ${token}`);
+      }
       return headers;
     },
   }),

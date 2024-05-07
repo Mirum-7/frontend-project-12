@@ -1,23 +1,19 @@
 import { Button, Modal } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import { useRemoveChannelMutation } from '../../store/slices/channels';
-import { close, getOpened, getType } from '../../store/slices/modal';
+import { close } from '../../store/slices/modal';
 
-const RemoveModal = () => {
+const RemoveModal = ({ id, isOpened }) => {
   const { t } = useTranslation();
 
   const dispatch = useDispatch();
-  const status = useSelector(getOpened);
-  const [type, id] = useSelector(getType).split('-');
 
   const [
     removeChannel,
     { error },
   ] = useRemoveChannelMutation();
-
-  const isOpened = status && type === 'remove';
 
   const closeHandler = () => {
     dispatch(close());
@@ -37,7 +33,7 @@ const RemoveModal = () => {
         <Modal.Title>{t('modals.remove.title')}</Modal.Title>
       </Modal.Header>
       <Modal.Footer>
-        {error ? <p className="text-danger">error</p> : null}
+        {error ? <p className="text-danger">{error}</p> : null}
         <Button variant="secondary" onClick={closeHandler}>
           Отмена
         </Button>
